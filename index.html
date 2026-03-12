@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Angioscanner - Masterpiece Final Fix</title>
+    <title>Angioscanner - Cloud Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Raleway:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -22,7 +22,7 @@
             overflow-x: hidden;
         }
 
-        /* Medical Icons Floating in Background */
+        /* Medical Icons Floating */
         .bg-stickers {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1; opacity: 0.05;
@@ -31,9 +31,7 @@
         .bg-stickers span { font-size: 4rem; padding: 20px; animation: float 10s infinite alternate ease-in-out; }
         @keyframes float { from { transform: translateY(0); } to { transform: translateY(-30px); } }
 
-        /* ------------------------------------------------ */
-        /* Welcome Screen Fix */
-        /* ------------------------------------------------ */
+        /* Welcome Screen */
         #welcome-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #000; z-index: 9999; display: flex; flex-direction: column;
@@ -58,11 +56,7 @@
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .logo-trigger:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 60px var(--gold);
-        }
-
+        .logo-trigger:hover { transform: scale(1.1); box-shadow: 0 0 60px var(--gold); }
         .logo-trigger img { width: 100%; height: 100%; object-fit: cover; }
 
         @keyframes pulse-logo {
@@ -83,9 +77,7 @@
             50% { opacity: 1; text-shadow: 0 0 40px #fff; }
         }
 
-        /* ------------------------------------------------ */
         /* Main App Interface */
-        /* ------------------------------------------------ */
         #main-app { display: none; position: relative; z-index: 5; }
 
         .navbar {
@@ -143,26 +135,30 @@
         }
         .login-content { background: #111; padding: 30px; border-radius: 20px; border: 2px solid var(--gold); text-align: center; width: 320px; }
         .login-content input { width: 100%; padding: 12px; margin: 15px 0; background: #000; border: 1px solid var(--gold); color: #fff; text-align: center; border-radius: 8px; }
+
+        .loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); display: none; z-index: 30000;
+            align-items: center; justify-content: center; color: var(--gold); font-family: 'Orbitron';
+        }
     </style>
 </head>
 <body>
+
+<div class="loading-overlay" id="loader">TRAITEMENT EN COURS...</div>
 
 <div class="bg-stickers">
     <span>🩻</span><span>🩺</span><span>☢️</span><span>🧬</span><span>🏥</span><span>🩻</span>
 </div>
 
-<!-- Screen 1: Welcome Fix -->
+<!-- Screen 1: Welcome -->
 <div id="welcome-screen">
     <div class="welcome-bg-container">
-        <!-- صورة الخلفية (الرجلين) -->
         <img src="1000037059.png" alt="Background">
     </div>
-    
-    <!-- اللوجو هو الزر المباشر -->
     <div class="logo-trigger" onclick="enterApp()">
         <img src="1000033460.jpg" alt="Logo INFSPM">
     </div>
-    
     <h1 class="welcome-title">WELCOME</h1>
     <p style="color: #666; font-family: 'Orbitron'; margin-top: 10px; letter-spacing: 2px;">CLICK LOGO TO START</p>
 </div>
@@ -183,7 +179,7 @@
         <div id="questions-mount"></div>
 
         <div style="margin-top:50px; text-align:center;">
-            <button id="submit-all" class="btn-final" disabled onclick="submitData()">ENVOYER LE DOSSIER</button>
+            <button id="submit-all" class="btn-final" disabled onclick="submitToCloud()">ENVOYER LE DOSSIER</button>
             <p onclick="openAuth()" style="margin-top:50px; color:#222; cursor:pointer; font-size:0.8rem;">Administration 🔒</p>
         </div>
     </div>
@@ -191,7 +187,7 @@
     <!-- Admin View -->
     <div id="admin-panel" class="container">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <h2 style="color:var(--gold); font-family:'Orbitron';">DASHBOARD</h2>
+            <h2 style="color:var(--gold); font-family:'Orbitron';">DASHBOARD CLOUD</h2>
             <button onclick="location.reload()" style="background:red; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">QUITTER</button>
         </div>
         <div style="display:flex; gap:10px; margin-bottom:20px;">
@@ -212,10 +208,26 @@
     </div>
 </div>
 
-<script>
-    const STORAGE_KEY = 'ANGIO_APP_DATA_VFINAL';
-    const PASS = 'anwar17blt';
+<!-- Firebase SDK -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    // Configuration Firebase
+    const firebaseConfig = JSON.parse(__firebase_config);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'angioscan-survey';
+
+    let user = null;
     let answers = {};
+    let cloudData = [];
+
+    // Auth
+    signInAnonymously(auth).catch(console.error);
+    onAuthStateChanged(auth, u => { user = u; });
 
     const questions = [
         { id: 1, section: "I. Données Socio-démographiques", q: "Quel est votre sexe ?", opt: ["Masculin", "Féminin"] },
@@ -245,17 +257,18 @@
         { id: 25, q: "Quelles sont vos suggestions pour améliorer la prise en charge ?", type: "text" }
     ];
 
-    function enterApp() {
+    window.enterApp = () => {
         document.getElementById('welcome-screen').style.opacity = '0';
         setTimeout(() => {
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             initSurvey();
         }, 500);
-    }
+    };
 
     function initSurvey() {
         const mount = document.getElementById('questions-mount');
+        if(mount.children.length > 0) return;
         questions.forEach(item => {
             if(item.section) {
                 const h = document.createElement('div');
@@ -265,7 +278,6 @@
             const card = document.createElement('div');
             card.className = 'q-card';
             card.innerHTML = `<div class="q-text">${item.q}</div>`;
-            
             const area = document.createElement('div');
             if(item.opt) {
                 item.opt.forEach(o => {
@@ -300,76 +312,67 @@
         document.getElementById('submit-all').disabled = (count === 0);
     }
 
-    function submitData() {
-        let db = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        answers.timestamp = new Date().toLocaleString();
-        db.push(answers);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-        
-        document.getElementById('survey-content').innerHTML = `
-            <div style="text-align:center; padding:100px 20px;">
-                <img src="1000037018.png" style="width:200px; border-radius:20px; border:2px solid var(--gold); box-shadow:0 0 20px var(--gold);">
-                <h2 style="color:var(--gold); font-family:'Orbitron'; margin-top:20px;">DOSSIER TRANSMIS</h2>
-                <button onclick="location.reload()" class="btn-final" style="margin-top:30px; width:auto; padding:15px 40px;">RETOUR</button>
-            </div>`;
-        window.scrollTo(0,0);
-    }
+    window.submitToCloud = async () => {
+        if (!user) { alert("Attendez la connexion au serveur..."); return; }
+        document.getElementById('loader').style.display = 'flex';
+        try {
+            const docData = { ...answers, timestamp: new Date().toISOString() };
+            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'responses'), docData);
+            document.getElementById('survey-content').innerHTML = `
+                <div style="text-align:center; padding:100px 20px;">
+                    <img src="1000037018.png" style="width:200px; border-radius:20px; border:2px solid var(--gold); box-shadow:0 0 20px var(--gold);">
+                    <h2 style="color:var(--gold); font-family:'Orbitron'; margin-top:20px;">ENVOYÉ AU CLOUD</h2>
+                    <button onclick="location.reload()" class="btn-final" style="margin-top:30px; width:auto; padding:15px 40px;">RETOUR</button>
+                </div>`;
+        } catch (e) {
+            alert("Erreur de connexion. Vérifiez votre internet.");
+        } finally {
+            document.getElementById('loader').style.display = 'none';
+        }
+    };
 
-    function openAuth() { document.getElementById('login-modal').style.display = 'flex'; }
+    window.openAuth = () => { document.getElementById('login-modal').style.display = 'flex'; };
 
-    function verifyPass() {
-        if(document.getElementById('admin-pass').value === PASS) {
+    window.verifyPass = async () => {
+        if(document.getElementById('admin-pass').value === 'anwar17blt') {
             document.getElementById('login-modal').style.display = 'none';
-            document.getElementById('survey-content').style.display = 'none';
-            document.getElementById('admin-panel').style.display = 'block';
-            showTab('stats');
+            document.getElementById('loader').style.display = 'flex';
+            try {
+                const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'responses'));
+                const snap = await getDocs(q);
+                cloudData = snap.docs.map(doc => doc.data());
+                document.getElementById('survey-content').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                showTab('stats');
+            } catch(e) {
+                alert("Erreur lors de la récupération des données.");
+            } finally {
+                document.getElementById('loader').style.display = 'none';
+            }
         } else { alert("Code incorrect"); }
-    }
+    };
 
-    function showTab(type) {
-        const db = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    window.showTab = (type) => {
         const area = document.getElementById('admin-render-area');
-        
         document.getElementById('tab-stat').style.background = type === 'stats' ? 'var(--gold)' : '#111';
         document.getElementById('tab-stat').style.color = type === 'stats' ? '#000' : '#fff';
         document.getElementById('tab-indiv').style.background = type === 'indiv' ? 'var(--gold)' : '#111';
         document.getElementById('tab-indiv').style.color = type === 'indiv' ? '#000' : '#fff';
 
-        if(db.length === 0) { area.innerHTML = "Aucune donnée."; return; }
+        if(cloudData.length === 0) { area.innerHTML = "Aucune donnée sur le serveur."; return; }
 
         let h = "";
         if(type === 'stats') {
-            h = `<div style="background:var(--gold); color:#000; padding:15px; border-radius:10px; text-align:center; font-weight:bold; margin-bottom:20px;">PARTICIPANTS: ${db.length}</div>`;
+            h = `<div style="background:var(--gold); color:#000; padding:15px; border-radius:10px; text-align:center; font-weight:bold; margin-bottom:20px;">TOTAL CLOUD: ${cloudData.length}</div>`;
             questions.forEach(q => {
                 h += `<div class="stat-card"><strong>${q.q}</strong>`;
                 if(q.opt) {
                     q.opt.forEach(o => {
-                        const count = db.filter(d => d[q.id] === o).length;
-                        const pct = ((count/db.length)*100).toFixed(1);
+                        const count = cloudData.filter(d => d[q.id] === o).length;
+                        const pct = ((count/cloudData.length)*100).toFixed(1);
                         h += `<div style="font-size:0.8rem; margin-top:10px; display:flex; justify-content:space-between;"><span>${o}</span><span>${count} (${pct}%)</span></div>
                               <div class="bar-container"><div class="bar-fill" style="width:${pct}%"></div></div>`;
                     });
                 } else {
-                    const comments = db.map(d => d[q.id]).filter(v => v);
-                    h += `<div style="margin-top:10px;">` + comments.map(c => `<div class="comment-item">"${c}"</div>`).join('') + `</div>`;
-                }
-                h += `</div>`;
-            });
-        } else {
-            db.forEach((entry, i) => {
-                h += `<div class="stat-card" style="border-top:4px solid var(--gold);">
-                        <div style="color:var(--gold); font-weight:bold; margin-bottom:10px;">Dossier #${i+1} <span style="font-size:0.7rem; color:#555; float:right;">${entry.timestamp}</span></div>`;
-                questions.forEach(q => {
-                    h += `<p style="font-size:0.8rem; margin-bottom:5px;"><span style="color:#666;">${q.q}:</span> ${entry[q.id] || '-'}</p>`;
-                });
-                h += `</div>`;
-            });
-        }
-        area.innerHTML = h;
-        window.scrollTo(0,0);
-    }
-</script>
-
-</body>
-</html>
-
+                    const comments = cloudData.map(d => d[q.id]).filter(v => v);
+                    h += `<div style="margin-top:10px;">` + comments.map(c => `<div class="comment

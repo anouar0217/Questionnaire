@@ -3,217 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Angioscanner Cloud Masterpiece</title>
+    <title>Angioscanner Cloud Mastery</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Raleway:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --gold: #ffcc00;
-            --gold-glow: #ffdb4d;
-            --bg-dark: #000000;
-        }
-
+        :root { --gold: #ffcc00; --bg: #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Raleway', sans-serif; overflow-x: hidden; width: 100%; height: 100%; }
 
-        body {
-            background-color: var(--bg-dark);
-            color: #fff;
-            font-family: 'Raleway', sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* Medical Stickers in Background */
-        .bg-stickers {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1; opacity: 0.08;
-            display: flex; flex-wrap: wrap; justify-content: space-around;
-        }
-        .bg-stickers span { font-size: 5rem; padding: 25px; animation: float 12s infinite alternate ease-in-out; }
-        @keyframes float { from { transform: translateY(0); } to { transform: translateY(-40px); } }
-
-        /* ------------------------------------------------ */
-        /* Welcome Screen (The Critical Fix) */
-        /* ------------------------------------------------ */
+        /* شاشة الترحيب - الإصلاح الجذري */
         #welcome-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 99999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; background: #000;
+            z-index: 999999; background: #000; display: flex; align-items: center; justify-content: center;
         }
 
-        .welcome-bg {
+        .bg-fixed-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('1000037059.png') no-repeat center center;
-            background-size: cover; opacity: 0.6; z-index: -1;
+            background-size: cover; opacity: 0.6; z-index: 1;
         }
 
-        .logo-container {
-            position: relative; width: 240px; height: 240px;
-            border-radius: 50%; border: 6px solid var(--gold);
-            cursor: pointer; z-index: 100000;
-            box-shadow: 0 0 30px var(--gold);
-            animation: pulse-logo 2.5s infinite;
-            transition: transform 0.3s;
-            overflow: hidden;
-        }
-        
-        /* Overlay invisible but clickable over the logo */
-        .click-shield {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 100001; cursor: pointer;
+        .interactive-layer {
+            position: relative; z-index: 2; text-align: center; width: 100%;
         }
 
-        .logo-container:hover { transform: scale(1.05); box-shadow: 0 0 60px var(--gold); }
-        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
-
-        @keyframes pulse-logo {
-            0% { box-shadow: 0 0 20px var(--gold); }
-            50% { box-shadow: 0 0 60px var(--gold), 0 0 20px #fff; }
-            100% { box-shadow: 0 0 20px var(--gold); }
+        /* حاوية اللوجو - جعلناها تستجيب للنقر بأي ثمن */
+        .logo-wrapper {
+            position: relative; width: 200px; height: 200px; margin: 0 auto;
+            border-radius: 50%; border: 5px solid var(--gold);
+            box-shadow: 0 0 40px var(--gold); animation: pulse 2s infinite;
+            cursor: pointer; overflow: hidden; z-index: 9999999; /* طبقة عليا جداً */
         }
 
-        .welcome-title {
-            font-family: 'Orbitron'; font-size: 3.5rem; color: var(--gold);
-            text-shadow: 0 0 25px var(--gold); letter-spacing: 12px;
-            margin-top: 35px; font-weight: 900; z-index: 100000;
-            pointer-events: none;
-        }
+        .logo-wrapper img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
-        /* ------------------------------------------------ */
-        /* App Layout */
-        /* ------------------------------------------------ */
-        #main-app { display: none; position: relative; z-index: 10; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 20px var(--gold); } 50% { transform: scale(1.05); box-shadow: 0 0 50px var(--gold); } }
 
-        .navbar {
-            position: sticky; top: 0; background: rgba(0,0,0,0.98);
-            border-bottom: 2px solid var(--gold); padding: 18px 25px;
-            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
-        }
+        /* التطبيق الرئيسي */
+        #main-app { display: none; }
+        .navbar { position: sticky; top: 0; background: #000; border-bottom: 2px solid var(--gold); padding: 15px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .section-header { background: rgba(255,204,0,0.1); color: var(--gold); font-family: 'Orbitron'; padding: 15px; margin: 30px 0; border-radius: 10px; border: 1px solid var(--gold); text-align: center; }
+        .q-card { background: #0a0a0a; border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #222; }
+        .opt-btn { width: 100%; text-align: left; padding: 15px; margin: 8px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; cursor: pointer; font-size: 1rem; }
+        .opt-btn.active { background: var(--gold); color: #000; font-weight: bold; border-color: #fff; }
+        .text-area { width: 100%; background: #000; color: var(--gold); padding: 15px; border-radius: 10px; border: 1px solid #444; min-height: 100px; outline: none; }
+        .btn-submit { width: 100%; background: var(--gold); color: #000; border: none; padding: 20px; border-radius: 15px; font-family: 'Orbitron'; font-weight: 900; font-size: 1.2rem; cursor: pointer; margin-top: 20px; }
+        .btn-submit:disabled { background: #333; cursor: not-allowed; color: #666; }
 
-        .container { max-width: 850px; margin: 0 auto; padding: 25px; }
-
-        .section-header {
-            background: linear-gradient(90deg, rgba(255,204,0,0.2), transparent);
-            color: var(--gold); font-family: 'Orbitron'; padding: 18px;
-            margin: 45px 0 25px; border-radius: 10px; border-left: 5px solid var(--gold);
-            font-weight: bold; font-size: 1.1rem;
-        }
-
-        .q-card {
-            background: rgba(15,15,15,0.98); border-radius: 20px; padding: 30px;
-            margin-bottom: 35px; border: 1px solid #222; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-        }
-
-        .q-text { font-size: 1.35rem; font-weight: 700; margin-bottom: 25px; line-height: 1.5; color: #eee; }
-
-        .opt-btn {
-            width: 100%; text-align: left; padding: 18px; margin-bottom: 12px;
-            background: #0a0a0a; border: 1px solid #333; color: #fff;
-            border-radius: 15px; cursor: pointer; font-size: 1.15rem; transition: 0.2s;
-        }
-        .opt-btn:hover { border-color: var(--gold); }
-        .opt-btn.active { background: var(--gold); color: #000; font-weight: 900; border-color: #fff; }
-
-        .text-area {
-            width: 100%; background: #000; border: 1px solid #444; color: var(--gold);
-            padding: 20px; border-radius: 15px; font-size: 1.15rem; min-height: 120px; outline: none;
-        }
-
-        .btn-submit {
-            background: var(--gold); color: #000; border: none; padding: 22px;
-            border-radius: 18px; font-family: 'Orbitron'; font-weight: 900;
-            cursor: pointer; width: 100%; font-size: 1.5rem; transition: 0.3s;
-            box-shadow: 0 5px 20px rgba(255,204,0,0.3);
-        }
-        .btn-submit:disabled { background: #222; color: #555; cursor: not-allowed; box-shadow: none; }
-
-        /* Admin Dashboard */
-        #admin-panel { display: none; padding-bottom: 100px; }
-        .stat-card { background: #0a0a0a; padding: 25px; border-radius: 18px; margin-bottom: 20px; border: 1px solid #222; }
-        .bar-container { background: #222; height: 14px; border-radius: 7px; margin-top: 12px; overflow: hidden; }
-        .bar-fill { background: var(--gold); height: 100%; transition: width 1s ease-out; }
-        .written-item { color: var(--gold); font-size: 0.95rem; font-style: italic; margin-top: 12px; border-top: 1px solid #1a1a1a; padding-top: 8px; }
-
-        /* Login */
-        #login-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); z-index: 999999; align-items: center; justify-content: center;
-        }
-        .login-content { background: #111; padding: 40px; border-radius: 25px; border: 2px solid var(--gold); text-align: center; width: 350px; }
-        .login-content input { width: 100%; padding: 15px; margin: 20px 0; background: #000; border: 1px solid var(--gold); color: #fff; text-align: center; border-radius: 10px; font-size: 1.2rem; }
-
-        .loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 1000000; display: none;
-            align-items: center; justify-content: center; flex-direction: column;
-        }
+        #cloud-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; z-index: 1000000; align-items: center; justify-content: center; color: var(--gold); font-family: 'Orbitron'; }
     </style>
 </head>
 <body>
 
-<div class="loader" id="cloud-loader">
-    <div style="width: 50px; height: 50px; border: 5px solid #222; border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite;"></div>
-    <p style="color:var(--gold); font-family:'Orbitron'; margin-top:20px; letter-spacing:2px;">SYNCHRONISATION CLOUD...</p>
-</div>
-<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+<div id="cloud-loader">SYNCHRONISATION...</div>
 
-<div class="bg-stickers">
-    <span>🩻</span><span>🩺</span><span>☢️</span><span>🧬</span><span>🏥</span><span>🩻</span>
-</div>
-
-<!-- SECTION 1: Welcome Fix -->
+<!-- شاشة الترحيب -->
 <div id="welcome-screen">
-    <div class="welcome-bg"></div>
-    <div class="logo-container">
-        <div class="click-shield" onclick="startExperience()"></div>
-        <img src="1000033460.jpg" alt="Logo INFSPM">
+    <div class="bg-fixed-layer"></div>
+    <div class="interactive-layer">
+        <!-- أضفنا الـ onclick هنا مباشرة وبشكل صريح جداً -->
+        <div class="logo-wrapper" onclick="handleStartClick()">
+            <img src="1000033460.jpg" alt="Logo">
+        </div>
+        <h1 style="font-family:'Orbitron'; color:var(--gold); margin-top:30px; letter-spacing:8px; font-weight:900; text-shadow: 0 0 20px #000;">WELCOME</h1>
+        <p style="color:#aaa; font-family:'Raleway'; margin-top:10px; letter-spacing:2px;">CLIQUEZ SUR LE LOGO POUR COMMENCER</p>
     </div>
-    <h1 class="welcome-title">WELCOME</h1>
-    <p style="color: #666; font-family:'Orbitron'; margin-top:15px; letter-spacing:3px;">TOUCH LOGO TO START</p>
 </div>
 
-<!-- SECTION 2: Main App -->
 <div id="main-app">
     <nav class="navbar">
-        <div style="font-family:'Orbitron'; color:var(--gold); font-weight:900; font-size:1.4rem;">INFSPM</div>
-        <div id="progress-indicator" style="color:var(--gold); font-family:'Orbitron'; font-weight:bold; border:1px solid var(--gold); padding:5px 15px; border-radius:20px;">0 / 25</div>
+        <div style="font-family:'Orbitron'; color:var(--gold); font-weight:bold; font-size:1.2rem;">INFSPM</div>
+        <div id="prog-text" style="color:var(--gold); font-family:'Orbitron';">0 / 25</div>
     </nav>
 
-    <div id="survey-view" class="container">
-        <header style="text-align:center; margin-bottom:50px;">
-            <h1 style="color:var(--gold); font-family:'Orbitron'; letter-spacing:3px; font-size:2rem;">ANGIOSCANNER</h1>
-            <p style="opacity:0.5; font-size:0.9rem;">Impact de la communication chez le sujet âgé</p>
-        </header>
-
-        <div id="questions-mount"></div>
-
-        <div style="margin-top:60px; text-align:center;">
-            <button id="final-submit" class="btn-submit" disabled onclick="saveToCloud()">ENVOYER LE DOSSIER</button>
-            <p onclick="showAuth()" style="margin-top:60px; color:#1a1a1a; cursor:pointer; font-weight:bold;">Admin Access</p>
-        </div>
+    <div class="container" id="survey-ui">
+        <div id="questions-list"></div>
+        <button id="final-btn" class="btn-submit" disabled onclick="sendDataToFirebase()">ENVOYER LES DONNÉES</button>
+        <p onclick="adminAccess()" style="text-align:center; color:#111; margin-top:80px; cursor:pointer;">Admin</p>
     </div>
 
-    <!-- Admin Panel -->
-    <div id="admin-panel" class="container">
+    <div class="container" id="admin-ui" style="display:none;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <h2 style="color:var(--gold); font-family:'Orbitron';">DASHBOARD GLOBAL</h2>
-            <button onclick="location.reload()" style="background:#ff3333; color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold;">QUITTER</button>
+            <h2 style="color:var(--gold); font-family:'Orbitron';">DASHBOARD SÉCURISÉ</h2>
+            <button onclick="location.reload()" style="background:red; border:none; color:#fff; padding:8px 15px; border-radius:8px; cursor:pointer;">RETOUR</button>
         </div>
-
-        <div style="display:flex; gap:10px; margin-bottom:30px;">
-            <button id="btn-stats" onclick="renderAdmin('stats')" style="flex:1; padding:15px; background:var(--gold); border:none; border-radius:12px; font-weight:bold; cursor:pointer;">📊 STATISTIQUES</button>
-            <button id="btn-indiv" onclick="renderAdmin('indiv')" style="flex:1; padding:15px; background:#111; color:white; border:1px solid #333; border-radius:12px; font-weight:bold; cursor:pointer;">👤 INDIVIDUEL</button>
-        </div>
-
-        <div id="admin-display"></div>
-    </div>
-</div>
-
-<!-- Login Modal -->
-<div id="login-modal">
-    <div class="login-content">
-        <h3 style="color:var(--gold); font-family:'Orbitron';">SÉCURITÉ</h3>
-        <input type="text" id="admin-key" placeholder="Code Secret">
-        <button onclick="checkAdmin()" style="background:var(--gold); border:none; padding:15px; width:100%; border-radius:10px; font-weight:900; cursor:pointer; font-family:'Orbitron';">DÉVERROUILLER</button>
-        <p onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:20px; color:#555; cursor:pointer;">Annuler</p>
+        <div id="stats-render"></div>
     </div>
 </div>
 
@@ -226,152 +100,129 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'angioscan-master-v1';
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'angioscan-global-v3';
 
     let user = null;
-    let responses = {};
-    let cloudData = [];
+    let userAnswers = {};
+    let allCloudData = [];
 
-    // Auth Start
-    signInAnonymously(auth).catch(e => console.error("Auth Error", e));
+    signInAnonymously(auth).catch(console.error);
     onAuthStateChanged(auth, u => { user = u; });
 
-    const surveyData = [
+    const questions = [
         { id: 1, section: "I. Données Socio-démographiques", q: "Quel est votre sexe ?", opt: ["Masculin", "Féminin"] },
         { id: 2, q: "Quelle est votre tranche d'âge ?", opt: ["20 – 30 ans", "31 – 40 ans", "41 – 50 ans", "Plus de 50 ans"] },
-        { id: 3, q: "Combien d'années d'expérience avez-vous ?", opt: ["Moins de 5 ans", "5 – 10 ans", "11 – 20 ans", "Plus de 20 ans"] },
-        { id: 4, q: "Quel est votre grade actuel ?", type: "text" },
-        { id: 5, q: "Type d'établissement ?", opt: ["Etablissement public hospitalier (EPH)", "Clinique privée"] },
-        { id: 6, section: "II. Pratique de l'Angioscanner", q: "Réalisez-vous régulièrement des angioscanners ?", opt: ["Oui", "Non"] },
-        { id: 7, q: "Combien par mois ?", opt: ["0 – 5", "6 – 10", "11 – 20", "Plus de 20"] },
-        { id: 8, q: "Examen de première intention ?", opt: ["Oui", "Non"] },
-        { id: 9, q: "Maîtrisez-vous le protocole technique ?", opt: ["Oui", "Non"] },
+        { id: 3, q: "Combien d'années d'expérience avez-vous في domaine de la radiologie ?", opt: ["Moins de 5 ans", "5 – 10 ans", "11 – 20 ans", "Plus de 20 ans"] },
+        { id: 4, q: "Quel est votre grade actuel (Manipulateur, Médecin, etc.) ?", type: "text" },
+        { id: 5, q: "Dans quel type d'établissement travaillez-vous ?", opt: ["EPH", "Clinique privée"] },
+        { id: 6, section: "II. Pratique de l'Angioscanner", q: "Réalisez-vous régulièrement des examens d'angioscanner ?", opt: ["Oui", "Non"] },
+        { id: 7, q: "Combien d'angioscanners réalisez-vous par mois ?", opt: ["0 – 5", "6 – 10", "11 – 20", "Plus de 20"] },
+        { id: 8, q: "L'angioscanner est-il pour vous l'examen de première intention ?", opt: ["Oui", "Non"] },
+        { id: 9, q: "Maîtrisez-vous parfaitement le protocole technique ?", opt: ["Oui", "Non"] },
         { id: 10, q: "Disposez-vous d'un injecteur automatique ?", opt: ["Oui", "Non"] },
         { id: 11, section: "III. Le Sujet Âgé & Communication", q: "Recevez-vous fréquemment des patients âgés (+65 ans) ?", opt: ["Oui", "Non"] },
-        { id: 12, q: "Plus de difficultés avec le sujet âgé ?", opt: ["Oui", "Non"] },
-        { id: 13, q: "Principale difficulté rencontrée ?", opt: ["Problèmes de communication", "Agitation / Immobilité", "Difficultés d'accès veineux"] },
-        { id: 14, q: "Adaptez-vous votre explication ?", opt: ["Oui", "Non"] },
-        { id: 15, q: "Technique de communication privilégiée ?", opt: ["Parler lentement/fort", "Gestes / Supports visuels", "Aide d'un accompagnant"] },
-        { id: 16, q: "Influence de la communication sur l'image ?", opt: ["Oui", "Non"] },
-        { id: 17, q: "Acquisition recommencée à cause du dialogue ?", opt: ["Oui", "Non"] },
-        { id: 18, q: "Plus de temps pour le psychologique ?", opt: ["Oui", "Non"] },
-        { id: 19, q: "Présence d'un proche facilitante ?", opt: ["Oui", "Non"] },
-        { id: 20, section: "IV. Formation & Solutions", q: "Formation spécifique en communication ?", opt: ["Oui", "Non"] },
-        { id: 21, q: "Rôle du manipulateur déterminant ?", opt: ["Oui", "Non"] },
-        { id: 22, q: "Facteur clé de réussite ?", opt: ["Performance Technique", "Qualité Communication", "Rapidité d'exécution"] },
-        { id: 23, q: "Arrivez-vous à trouver des solutions ?", opt: ["Oui", "Non"] },
-        { id: 24, q: "Stratégies pour rassurer un anxieux ?", type: "text" },
-        { id: 25, q: "Suggestions d'amélioration ?", type: "text" }
+        { id: 12, q: "La réalisation d'un angioscanner chez un sujet âgé présente-t-elle plus de difficultés ?", opt: ["Oui", "Non"] },
+        { id: 13, q: "Quelle est la principale difficulté rencontrée ?", opt: ["Communication", "Agitation", "Accès veineux"] },
+        { id: 14, q: "Adaptez-vous votre façon d'expliquer l'examen ?", opt: ["Oui", "Non"] },
+        { id: 15, q: "Quelle technique de communication privilégiez-vous ?", opt: ["Lentement/Fort", "Gestes", "Accompagnant"] },
+        { id: 16, q: "Pensez-vous qu'une bonne communication influence la qualité de l'image ?", opt: ["Oui", "Non"] },
+        { id: 17, q: "Avez-vous déjà dû recommencer une acquisition à cause d'un défaut de communication ?", opt: ["Oui", "Non"] },
+        { id: 18, q: "Prenez-vous plus de temps pour la préparation psychologique ?", opt: ["Oui", "Non"] },
+        { id: 19, q: "La présence d'un proche facilite-elle la coopération ?", opt: ["Oui", "Non"] },
+        { id: 20, section: "IV. Formation & Solutions", q: "Avez-vous reçu une formation spécifique sur la communication ?", opt: ["Oui", "Non"] },
+        { id: 21, q: "Pensez-vous que le rôle du manipulateur est déterminant ?", opt: ["Oui", "Non"] },
+        { id: 22, q: "Quel est le facteur le plus important ?", opt: ["Technique", "Communication", "Rapidité"] },
+        { id: 23, q: "Arrivez-vous généralement à trouver des solutions ?", opt: ["Oui", "Non"] },
+        { id: 24, q: "Quelles sont vos stratégies pour rassurer un patient anxieux ?", type: "text" },
+        { id: 25, q: "Quelles sont vos suggestions pour améliorer la prise en charge ?", type: "text" }
     ];
 
-    window.startExperience = () => {
-        const welcome = document.getElementById('welcome-screen');
-        welcome.style.opacity = '0';
-        welcome.style.pointerEvents = 'none';
-        setTimeout(() => {
-            welcome.style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            buildUI();
-        }, 500);
+    window.handleStartClick = () => {
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+        initQuestions();
     };
 
-    function buildUI() {
-        const mount = document.getElementById('questions-mount');
+    function initQuestions() {
+        const mount = document.getElementById('questions-list');
         if(mount.children.length > 0) return;
-
-        surveyData.forEach(item => {
-            if(item.section) {
-                const s = document.createElement('div');
-                s.className = 'section-header'; s.innerText = item.section;
-                mount.appendChild(s);
+        questions.forEach(q => {
+            if(q.section) {
+                const head = document.createElement('div'); head.className = 'section-header'; head.innerText = q.section; mount.appendChild(head);
             }
-            const card = document.createElement('div');
-            card.className = 'q-card';
-            card.innerHTML = `<div class="q-text">${item.id}. ${item.q}</div>`;
-            const area = document.createElement('div');
-            if(item.opt) {
-                item.opt.forEach(o => {
-                    const b = document.createElement('button');
-                    b.className = 'opt-btn'; b.innerText = o;
-                    b.onclick = () => {
-                        Array.from(area.children).forEach(el => el.classList.remove('active'));
-                        b.classList.add('active');
-                        responses[item.id] = o;
-                        updateProg();
+            const card = document.createElement('div'); card.className = 'q-card';
+            card.innerHTML = `<p style="margin-bottom:15px; font-weight:900;">${q.id}. ${q.q}</p>`;
+            const box = document.createElement('div');
+            if(q.opt) {
+                q.opt.forEach(o => {
+                    const btn = document.createElement('button'); btn.className = 'opt-btn'; btn.innerText = o;
+                    btn.onclick = () => {
+                        Array.from(box.children).forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active'); userAnswers[q.id] = o; updateProgress();
                     };
-                    area.appendChild(b);
+                    box.appendChild(btn);
                 });
             } else {
-                const t = document.createElement('textarea');
-                t.className = 'text-area'; t.placeholder = "Écrivez ici...";
-                t.oninput = () => {
-                    if(t.value.trim().length > 1) responses[item.id] = t.value.trim();
-                    else delete responses[item.id];
-                    updateProg();
-                };
-                area.appendChild(t);
+                const txt = document.createElement('textarea'); txt.className = 'text-area'; txt.placeholder = "Votre réponse...";
+                txt.oninput = () => { if(txt.value.trim()){userAnswers[q.id]=txt.value.trim();}else{delete userAnswers[q.id];} updateProgress(); };
+                box.appendChild(txt);
             }
-            card.appendChild(area);
-            mount.appendChild(card);
+            card.appendChild(box); mount.appendChild(card);
         });
     }
 
-    function updateProg() {
-        const total = Object.keys(responses).length;
-        document.getElementById('progress-indicator').innerText = `${total} / 25`;
-        document.getElementById('final-submit').disabled = (total === 0);
+    function updateProgress() {
+        const count = Object.keys(userAnswers).length;
+        document.getElementById('prog-text').innerText = `${count} / 25`;
+        document.getElementById('final-btn').disabled = count === 0;
     }
 
-    window.saveToCloud = async () => {
-        if(!user) { alert("Connexion instable..."); return; }
+    window.sendDataToFirebase = async () => {
+        if(!user) return;
         document.getElementById('cloud-loader').style.display = 'flex';
         try {
-            const finalData = { ...responses, date: new Date().toISOString() };
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'survey_results'), finalData);
-            document.getElementById('survey-view').innerHTML = `
-                <div style="text-align:center; padding:100px 20px;">
-                    <img src="1000037018.png" style="width:200px; border-radius:30px; border:3px solid var(--gold); box-shadow:0 0 30px var(--gold);">
-                    <h1 style="color:var(--gold); font-family:'Orbitron'; margin-top:30px;">MERCI !</h1>
-                    <p style="font-size:1.1rem; opacity:0.7;">Les données ont été sauvegardées sur le Cloud.</p>
-                    <button onclick="location.reload()" class="btn-submit" style="margin-top:40px; width:auto; padding:15px 40px; font-size:1.1rem;">NOUVELLE RÉPONSE</button>
-                </div>`;
-        } catch(e) { alert("Erreur de sauvegarde Cloud."); }
+            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'survey'), { ...userAnswers, timestamp: new Date().toISOString() });
+            document.getElementById('survey-ui').innerHTML = `<div style="text-align:center; padding:100px 20px;"><img src="1000037018.png" style="width:150px; border-radius:30px; border:2px solid var(--gold); box-shadow: 0 0 20px var(--gold);"><h2 style="color:var(--gold); margin-top:30px; font-family:'Orbitron';">TERMINÉ AVEC SUCCÈS</h2><p style="opacity:0.6; margin-top:10px;">Données sauvegardées sur le Cloud</p><button onclick="location.reload()" class="btn-submit" style="width:auto; padding:10px 40px; margin-top:30px;">RETOUR</button></div>`;
+        } catch(e) { alert("Erreur de connexion Cloud."); }
         document.getElementById('cloud-loader').style.display = 'none';
     };
 
-    window.showAuth = () => { document.getElementById('login-modal').style.display = 'flex'; };
-
-    window.checkAdmin = async () => {
-        if(document.getElementById('admin-key').value === 'anwar17blt') {
-            document.getElementById('login-modal').style.display = 'none';
+    window.adminAccess = async () => {
+        const pin = prompt("Code Administrateur :");
+        if(pin === 'anwar17blt') {
             document.getElementById('cloud-loader').style.display = 'flex';
             try {
-                const snap = await getDocs(query(collection(db, 'artifacts', appId, 'public', 'data', 'survey_results')));
-                cloudData = snap.docs.map(doc => doc.data());
-                document.getElementById('survey-view').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-                renderAdmin('stats');
-            } catch(e) { alert("Erreur de synchronisation."); }
+                const snap = await getDocs(query(collection(db, 'artifacts', appId, 'public', 'data', 'survey')));
+                allCloudData = snap.docs.map(d => d.data());
+                document.getElementById('survey-ui').style.display = 'none';
+                document.getElementById('admin-ui').style.display = 'block';
+                renderAdminStats();
+            } catch(e) { alert("Accès impossible."); }
             document.getElementById('cloud-loader').style.display = 'none';
-        } else { alert("Accès refusé."); }
+        }
     };
 
-    window.renderAdmin = (type) => {
-        const area = document.getElementById('admin-display');
-        document.getElementById('btn-stats').style.background = type === 'stats' ? 'var(--gold)' : '#111';
-        document.getElementById('btn-stats').style.color = type === 'stats' ? '#000' : '#fff';
-        document.getElementById('btn-indiv').style.background = type === 'indiv' ? 'var(--gold)' : '#111';
-        document.getElementById('btn-indiv').style.color = type === 'indiv' ? '#000' : '#fff';
+    function renderAdminStats() {
+        const dest = document.getElementById('stats-render');
+        let html = `<div style="background:var(--gold); color:#000; padding:15px; border-radius:10px; text-align:center; font-weight:bold; margin-bottom:25px; font-family:'Orbitron';">SESSIONS CLOUD : ${allCloudData.length}</div>`;
+        questions.forEach(q => {
+            html += `<div class="q-card"><strong>${q.id}. ${q.q}</strong>`;
+            if(q.opt) {
+                q.opt.forEach(o => {
+                    const c = allCloudData.filter(d => d[q.id] === o).length;
+                    const p = allCloudData.length ? ((c/allCloudData.length)*100).toFixed(1) : 0;
+                    html += `<div style="font-size:0.85rem; margin-top:12px; display:flex; justify-content:space-between;"><span>${o}</span><span>${p}%</span></div><div style="height:8px; background:#222; border-radius:4px; margin-top:4px;"><div style="width:${p}%; background:var(--gold); height:100%; border-radius:4px;"></div></div>`;
+                });
+            } else {
+                allCloudData.forEach(d => { if(d[q.id]) html += `<div style="color:var(--gold); font-size:0.8rem; margin-top:10px; border-top:1px solid #1a1a1a; padding-top:5px;">• ${d[q.id]}</div>`; });
+            }
+            html += `</div>`;
+        });
+        dest.innerHTML = html;
+        window.scrollTo(0,0);
+    }
+</script>
 
-        if(cloudData.length === 0) { area.innerHTML = "<p style='text-align:center; padding:50px; color:#444;'>Aucune donnée cloud.</p>"; return; }
+</body>
+</html>
 
-        let html = "";
-        if(type === 'stats') {
-            html += `<div style="background:var(--gold); color:#000; padding:15px; border-radius:12px; text-align:center; font-weight:bold; margin-bottom:25px; font-family:'Orbitron';">RÉPONSES TOTALES : ${cloudData.length}</div>`;
-            surveyData.forEach(q => {
-                html += `<div class="stat-card"><strong>Q${q.id}: ${q.q}</strong>`;
-                if(q.opt) {
-                    q.opt.forEach(o => {
-                        const count = cloudData.filter(d => d[q.id] === o).length;
-                        const pct = ((count/cloudData.length)*100).toFixed(1);
-                        html += `<div style="font-size:0.85rem; margin-

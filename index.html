@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Angioscanner - Masterpiece Final</title>
+    <title>Angioscanner - Masterpiece Final Fix</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Raleway:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #ffcc00;
-            --gold-glow: #ffdb4d;
-            --bg-dark: #050505;
-            --card-bg: rgba(15, 15, 15, 0.96);
+            --gold-dark: #b8860b;
+            --bg-dark: #000000;
+            --card-bg: rgba(10, 10, 10, 0.98);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -22,234 +22,208 @@
             overflow-x: hidden;
         }
 
-        /* ------------------------------------------------ */
-        /* Medical Background Decor */
-        /* ------------------------------------------------ */
+        /* Medical Icons Floating in Background */
         .bg-stickers {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: -1; opacity: 0.05;
+            pointer-events: none; z-index: 1; opacity: 0.05;
             display: flex; flex-wrap: wrap; justify-content: space-around;
         }
-        .bg-stickers span { font-size: 5rem; padding: 30px; animation: float 12s infinite alternate ease-in-out; }
-        @keyframes float { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-40px) rotate(10deg); } }
+        .bg-stickers span { font-size: 4rem; padding: 20px; animation: float 10s infinite alternate ease-in-out; }
+        @keyframes float { from { transform: translateY(0); } to { transform: translateY(-30px); } }
 
         /* ------------------------------------------------ */
-        /* Welcome Screen (Logo as Button) */
+        /* Welcome Screen Fix */
         /* ------------------------------------------------ */
         #welcome-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 9999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; transition: opacity 0.8s ease;
+            background-color: #000; z-index: 9999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; transition: opacity 0.5s ease;
         }
 
-        .hero-box {
-            position: relative; width: 95%; max-width: 500px;
-            aspect-ratio: 0.85; display: flex; align-items: center; justify-content: center;
+        .welcome-bg-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+        }
+        
+        .welcome-bg-container img {
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.7;
         }
 
-        .hero-img {
-            width: 100%; height: 100%; object-fit: cover; border-radius: 25px;
-            box-shadow: 0 0 50px rgba(0,0,0,1) inset; border: 1px solid #222;
+        .logo-trigger {
+            position: relative; width: 220px; height: 220px;
+            border-radius: 50%; border: 5px solid var(--gold);
+            cursor: pointer; overflow: hidden; z-index: 10000;
+            box-shadow: 0 0 30px var(--gold);
+            animation: pulse-logo 2s infinite;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Interactive Logo Circle */
-        .logo-btn-wrapper {
-            position: absolute; top: 62.5%; left: 50.5%; transform: translate(-50%, -50%);
-            width: 45%; aspect-ratio: 1/1; border-radius: 50%;
-            cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10; border: 4px solid var(--gold);
-            box-shadow: 0 0 25px var(--gold);
-            overflow: hidden; animation: pulse 2.5s infinite;
+        .logo-trigger:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 60px var(--gold);
         }
 
-        .logo-btn-wrapper:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            box-shadow: 0 0 50px var(--gold), 0 0 80px var(--gold);
-            border-color: #fff;
-        }
+        .logo-trigger img { width: 100%; height: 100%; object-fit: cover; }
 
-        .logo-btn-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 15px var(--gold); }
-            50% { box-shadow: 0 0 40px var(--gold), 0 0 10px #fff; }
-            100% { box-shadow: 0 0 15px var(--gold); }
+        @keyframes pulse-logo {
+            0% { box-shadow: 0 0 20px var(--gold); }
+            50% { box-shadow: 0 0 50px var(--gold), 0 0 20px #fff; }
+            100% { box-shadow: 0 0 20px var(--gold); }
         }
 
         .welcome-title {
             font-family: 'Orbitron'; font-size: 3.5rem; color: var(--gold);
-            text-shadow: 0 0 20px var(--gold), 0 0 40px var(--gold);
-            letter-spacing: 10px; margin-top: 25px; animation: glow-text 2s infinite;
-            font-weight: 900;
+            text-shadow: 0 0 25px var(--gold); letter-spacing: 10px;
+            margin-top: 30px; font-weight: 900; z-index: 10001;
+            animation: glow-text 2s infinite;
         }
 
         @keyframes glow-text {
-            0%, 100% { opacity: 0.9; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.03); text-shadow: 0 0 40px #fff, 0 0 20px var(--gold); }
-        }
-
-        .instruction-tag {
-            color: #444; font-family: 'Orbitron'; font-size: 0.8rem; margin-top: 15px;
-            letter-spacing: 2px; text-transform: uppercase; font-weight: bold;
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; text-shadow: 0 0 40px #fff; }
         }
 
         /* ------------------------------------------------ */
-        /* Survey UI Styles */
+        /* Main App Interface */
         /* ------------------------------------------------ */
-        #main-app { display: none; }
+        #main-app { display: none; position: relative; z-index: 5; }
 
         .navbar {
-            position: sticky; top: 0; background: rgba(5,5,5,0.98);
-            border-bottom: 2px solid var(--gold); padding: 15px 25px;
+            position: sticky; top: 0; background: rgba(0,0,0,0.95);
+            border-bottom: 2px solid var(--gold); padding: 15px 20px;
             display: flex; justify-content: space-between; align-items: center; z-index: 100;
         }
 
-        .container { max-width: 850px; margin: 0 auto; padding: 30px 20px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
 
         .section-header {
-            background: linear-gradient(90deg, transparent, rgba(255,204,0,0.2), transparent);
-            color: var(--gold); font-family: 'Orbitron'; padding: 18px;
-            margin: 50px 0 25px; text-align: center; border-radius: 12px;
-            border: 1px solid var(--gold-dark); font-size: 1.25rem; font-weight: bold;
+            background: rgba(255,204,0,0.15); color: var(--gold);
+            font-family: 'Orbitron'; padding: 15px; margin: 40px 0 20px;
+            text-align: center; border-radius: 10px; border: 1px solid var(--gold-dark);
+            font-weight: bold;
         }
 
         .q-card {
-            background: var(--card-bg); border-radius: 20px; padding: 30px;
-            margin-bottom: 35px; border: 1px solid #222; border-left: 6px solid var(--gold);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: 0.3s;
+            background: var(--card-bg); border-radius: 20px; padding: 25px;
+            margin-bottom: 30px; border-left: 6px solid var(--gold);
+            border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .q-card:hover { border-color: var(--gold); }
 
-        .q-text { font-size: 1.35rem; font-weight: 700; margin-bottom: 25px; line-height: 1.5; color: #fff; }
+        .q-text { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; line-height: 1.4; }
 
         .opt-btn {
-            width: 100%; text-align: left; padding: 18px; margin-bottom: 12px;
+            width: 100%; text-align: left; padding: 15px; margin-bottom: 10px;
             background: #111; border: 1px solid #333; color: #fff;
-            border-radius: 15px; cursor: pointer; font-size: 1.15rem; transition: 0.2s;
+            border-radius: 12px; cursor: pointer; font-size: 1.1rem;
         }
-        .opt-btn:hover { border-color: var(--gold); background: #1a1a1a; }
         .opt-btn.active { background: var(--gold); color: #000; font-weight: 900; border-color: #fff; }
 
         .text-area {
             width: 100%; background: #000; border: 1px solid #444; color: var(--gold);
-            padding: 20px; border-radius: 15px; font-size: 1.15rem; min-height: 130px; outline: none;
+            padding: 15px; border-radius: 12px; font-size: 1.1rem; min-height: 100px;
         }
-        .text-area:focus { border-color: var(--gold); }
 
-        .btn-submit {
-            background: var(--gold); color: #000; border: none; padding: 22px 60px;
-            border-radius: 18px; font-family: 'Orbitron'; font-weight: 900; 
-            cursor: pointer; width: 100%; font-size: 1.5rem; transition: 0.3s;
-            box-shadow: 0 0 20px rgba(255,204,0,0.2);
+        .btn-final {
+            background: var(--gold); color: #000; border: none; padding: 20px;
+            border-radius: 15px; font-family: 'Orbitron'; font-weight: 900;
+            cursor: pointer; width: 100%; font-size: 1.3rem; transition: 0.3s;
         }
-        .btn-submit:disabled { background: #222; color: #555; cursor: not-allowed; box-shadow: none; }
+        .btn-final:disabled { background: #333; color: #666; cursor: not-allowed; }
 
-        /* ------------------------------------------------ */
-        /* Admin Dashboard Panels */
-        /* ------------------------------------------------ */
+        /* Admin Styles */
         #admin-panel { display: none; padding-bottom: 100px; }
-        .admin-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .stat-card { background: #0f0f0f; padding: 25px; border-radius: 18px; margin-bottom: 20px; border: 1px solid #222; }
-        .bar-container { background: #222; height: 14px; border-radius: 7px; margin-top: 10px; overflow: hidden; }
-        .bar-fill { background: var(--gold); height: 100%; transition: width 1s cubic-bezier(0.1, 0, 0.2, 1); }
-        
-        .written-box { 
-            margin-top: 20px; background: #000; border: 1px dashed #333; padding: 15px; 
-            border-radius: 12px; max-height: 250px; overflow-y: auto;
-        }
-        .written-item { color: var(--gold); font-style: italic; font-size: 0.95rem; margin-bottom: 10px; border-bottom: 1px solid #111; padding-bottom: 5px; list-style: none; }
-        
-        .indiv-file { background: #111; border: 1px solid var(--gold-dark); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
-        .indiv-head { border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;}
-        
+        .stat-card { background: #111; padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #222; }
+        .bar-container { background: #222; height: 12px; border-radius: 6px; margin-top: 10px; overflow: hidden; }
+        .bar-fill { background: var(--gold); height: 100%; transition: width 1s; }
+        .comment-item { color: var(--gold); font-size: 0.9rem; font-style: italic; margin-top: 10px; border-top: 1px solid #222; padding-top: 5px; }
+
         #login-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.96); z-index: 10000; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center;
         }
-        .login-content { background: #111; padding: 40px; border-radius: 25px; border: 2px solid var(--gold); text-align: center; width: 360px; box-shadow: 0 0 50px var(--gold); }
-        .login-content input { width: 100%; padding: 15px; margin: 20px 0; background: #000; border: 1px solid var(--gold); color: #fff; text-align: center; border-radius: 10px; font-size: 1.2rem; }
+        .login-content { background: #111; padding: 30px; border-radius: 20px; border: 2px solid var(--gold); text-align: center; width: 320px; }
+        .login-content input { width: 100%; padding: 12px; margin: 15px 0; background: #000; border: 1px solid var(--gold); color: #fff; text-align: center; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-<!-- Medical Animated Background -->
 <div class="bg-stickers">
-    <span>🩻</span><span>🩺</span><span>☢️</span><span>🧬</span><span>🏥</span><span>🦴</span><span>🩻</span><span>🩺</span>
+    <span>🩻</span><span>🩺</span><span>☢️</span><span>🧬</span><span>🏥</span><span>🩻</span>
 </div>
 
-<!-- SECTION 1: Welcome Screen (Logo Button) -->
+<!-- Screen 1: Welcome Fix -->
 <div id="welcome-screen">
-    <div class="hero-box">
-        <img src="1000037059.png" class="hero-img">
-        <div class="logo-btn-wrapper" onclick="startApp()" title="ENTRER">
-            <img src="1000033460.jpg" alt="Logo INFSPM">
-        </div>
+    <div class="welcome-bg-container">
+        <!-- صورة الخلفية (الرجلين) -->
+        <img src="1000037059.png" alt="Background">
     </div>
+    
+    <!-- اللوجو هو الزر المباشر -->
+    <div class="logo-trigger" onclick="enterApp()">
+        <img src="1000033460.jpg" alt="Logo INFSPM">
+    </div>
+    
     <h1 class="welcome-title">WELCOME</h1>
-    <p class="instruction-tag">Appuyez sur le logo pour entrer</p>
+    <p style="color: #666; font-family: 'Orbitron'; margin-top: 10px; letter-spacing: 2px;">CLICK LOGO TO START</p>
 </div>
 
-<!-- SECTION 2: Main Application Interface -->
+<!-- Screen 2: Main App -->
 <div id="main-app">
     <nav class="navbar">
-        <div style="font-family:'Orbitron'; color:var(--gold); font-weight:900; font-size:1.4rem; letter-spacing:2px;">INFSPM</div>
-        <div id="progress-indicator" style="color:var(--gold); font-weight:bold; font-family:'Orbitron'; background:rgba(255,204,0,0.1); padding:8px 20px; border-radius:25px; border:1px solid var(--gold);">0 / 25</div>
+        <div style="font-family:'Orbitron'; color:var(--gold); font-weight:900;">INFSPM</div>
+        <div id="progress-text" style="color:var(--gold); font-family:'Orbitron'; font-weight:bold;">0 / 25</div>
     </nav>
 
-    <!-- Survey View -->
-    <div id="survey-container" class="container">
-        <header style="text-align:center; margin-bottom:50px;">
-            <h1 style="font-family:'Orbitron'; color:var(--gold); letter-spacing:4px; font-size:2.2rem;">ANGIOSCANNER</h1>
-            <p style="opacity:0.6; font-size:1rem; margin-top:5px;">Étude sur l'impact de la communication chez le sujet âgé</p>
+    <div id="survey-content" class="container">
+        <header style="text-align:center; margin-bottom:40px;">
+            <h1 style="color:var(--gold); font-family:'Orbitron'; letter-spacing:2px;">ANGIOSCANNER</h1>
+            <p style="opacity:0.5;">Étude de la communication chez le sujet âgé</p>
         </header>
 
         <div id="questions-mount"></div>
 
-        <div style="text-align:center; padding:70px 0;">
-            <button id="main-submit-btn" class="btn-submit" disabled onclick="saveSubmission()">ENVOYER LE DOSSIER</button>
-            <p onclick="showAdminAuth()" style="margin-top:60px; color:#222; cursor:pointer; font-size:0.85rem; text-decoration:underline; font-weight:bold;">Administration Panel</p>
+        <div style="margin-top:50px; text-align:center;">
+            <button id="submit-all" class="btn-final" disabled onclick="submitData()">ENVOYER LE DOSSIER</button>
+            <p onclick="openAuth()" style="margin-top:50px; color:#222; cursor:pointer; font-size:0.8rem;">Administration 🔒</p>
         </div>
     </div>
 
     <!-- Admin View -->
     <div id="admin-panel" class="container">
-        <div class="admin-title-row">
-            <h2 style="color:var(--gold); font-family:'Orbitron'; letter-spacing:2px;">TABLEAU DE BORD</h2>
-            <button onclick="location.reload()" style="background:#ff3333; color:white; border:none; padding:12px 25px; border-radius:12px; cursor:pointer; font-weight:900; font-family:'Orbitron';">QUITTER</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <h2 style="color:var(--gold); font-family:'Orbitron';">DASHBOARD</h2>
+            <button onclick="location.reload()" style="background:red; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">QUITTER</button>
         </div>
-        
-        <div style="display:flex; gap:12px; margin-bottom:40px;">
-            <button id="btn-stats-tab" onclick="toggleAdminTab('stats')" style="flex:1; padding:18px; background:var(--gold); border:none; border-radius:15px; font-weight:bold; cursor:pointer; font-family:'Orbitron'; font-size:1rem;">📊 STATISTIQUES</button>
-            <button id="btn-indiv-tab" onclick="toggleAdminTab('indiv')" style="flex:1; padding:18px; background:#111; color:white; border:1px solid #333; border-radius:15px; font-weight:bold; cursor:pointer; font-family:'Orbitron'; font-size:1rem;">👤 INDIVIDUEL</button>
+        <div style="display:flex; gap:10px; margin-bottom:20px;">
+            <button id="tab-stat" onclick="showTab('stats')" style="flex:1; padding:12px; background:var(--gold); border:none; border-radius:10px; font-weight:bold; cursor:pointer;">Statistiques</button>
+            <button id="tab-indiv" onclick="showTab('indiv')" style="flex:1; padding:12px; background:#111; color:white; border:1px solid #333; border-radius:10px; font-weight:bold; cursor:pointer;">Individuel</button>
         </div>
-
-        <div id="admin-content-area"></div>
+        <div id="admin-render-area"></div>
     </div>
 </div>
 
-<!-- Admin Login Modal -->
+<!-- Auth Modal -->
 <div id="login-modal">
     <div class="login-content">
-        <h3 style="color:var(--gold); font-family:'Orbitron'; letter-spacing:2px;">IDENTIFICATION</h3>
-        <input type="text" id="pass-field" placeholder="Entrez le code secret">
-        <button onclick="validateAdmin()" style="background:var(--gold); border:none; padding:18px; font-weight:900; cursor:pointer; width:100%; border-radius:12px; font-family:'Orbitron'; font-size:1.1rem;">DÉVERROUILLER</button>
-        <p onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:20px; color:#666; cursor:pointer; font-weight:bold;">Annuler</p>
+        <h3 style="color:var(--gold); font-family:'Orbitron';">ADMIN LOGIN</h3>
+        <input type="text" id="admin-pass" placeholder="Mot de passe">
+        <button onclick="verifyPass()" style="background:var(--gold); border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">ACCÉDER</button>
+        <p onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:15px; color:#444; cursor:pointer;">Fermer</p>
     </div>
 </div>
 
 <script>
-    const STORAGE_KEY = 'INFSPM_ANGIO_FINAL_DB';
-    const SECRET_KEY = 'anwar17blt';
-    let dataEntry = {};
+    const STORAGE_KEY = 'ANGIO_APP_DATA_VFINAL';
+    const PASS = 'anwar17blt';
+    let answers = {};
 
-    // 25 Questions - Original Text - 4 Sections
-    const surveyData = [
+    const questions = [
         { id: 1, section: "I. Données Socio-démographiques", q: "Quel est votre sexe ?", opt: ["Masculin", "Féminin"] },
         { id: 2, q: "Quelle est votre tranche d'âge ?", opt: ["20 – 30 ans", "31 – 40 ans", "41 – 50 ans", "Plus de 50 ans"] },
         { id: 3, q: "Combien d'années d'expérience avez-vous dans le domaine de la radiologie ?", opt: ["Moins de 5 ans", "5 – 10 ans", "11 – 20 ans", "Plus de 20 ans"] },
         { id: 4, q: "Quel est votre grade actuel (Manipulateur, Médecin, etc.) ?", type: "text" },
         { id: 5, q: "Dans quel type d'établissement travaillez-vous ?", opt: ["Etablissement public hospitalier (EPH)", "Clinique privée"] },
-        { id: 6, section: "II. Pratique de l'Angioscanner", q: "Réالisez-vous régulièrement des examens d'angioscanner ?", opt: ["Oui", "Non"] },
+        { id: 6, section: "II. Pratique de l'Angioscanner", q: "Réalisez-vous régulièrement des examens d'angioscanner ?", opt: ["Oui", "Non"] },
         { id: 7, q: "Combien d'angioscanners réalisez-vous environ par mois ?", opt: ["0 – 5", "6 – 10", "11 – 20", "Plus de 20"] },
         { id: 8, q: "L'angioscanner est-il pour vous l'examen de première intention ?", opt: ["Oui", "Non"] },
         { id: 9, q: "Maîtrisez-vous parfaitement le protocole technique de l'angioscanner ?", opt: ["Oui", "Non"] },
@@ -271,94 +245,131 @@
         { id: 25, q: "Quelles sont vos suggestions pour améliorer la prise en charge ?", type: "text" }
     ];
 
-    function startApp() {
-        const welcome = document.getElementById('welcome-screen');
-        welcome.style.opacity = '0';
+    function enterApp() {
+        document.getElementById('welcome-screen').style.opacity = '0';
         setTimeout(() => {
-            welcome.style.display = 'none';
+            document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
-            buildSurvey();
-        }, 800);
+            initSurvey();
+        }, 500);
     }
 
-    function buildSurvey() {
+    function initSurvey() {
         const mount = document.getElementById('questions-mount');
-        if(mount.children.length > 0) return;
-
-        surveyData.forEach(item => {
+        questions.forEach(item => {
             if(item.section) {
-                const sec = document.createElement('div');
-                sec.className = 'section-header'; sec.innerText = item.section;
-                mount.appendChild(sec);
+                const h = document.createElement('div');
+                h.className = 'section-header'; h.innerText = item.section;
+                mount.appendChild(h);
             }
             const card = document.createElement('div');
             card.className = 'q-card';
-            card.innerHTML = `<div class="q-text">${item.id}. ${item.q}</div>`;
+            card.innerHTML = `<div class="q-text">${item.q}</div>`;
             
-            const interactive = document.createElement('div');
+            const area = document.createElement('div');
             if(item.opt) {
-                item.opt.forEach(opt => {
-                    const btn = document.createElement('button');
-                    btn.className = 'opt-btn'; btn.innerText = opt;
-                    btn.onclick = () => {
-                        Array.from(interactive.children).forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                        dataEntry[item.id] = opt;
-                        updateLiveProgress();
+                item.opt.forEach(o => {
+                    const b = document.createElement('button');
+                    b.className = 'opt-btn'; b.innerText = o;
+                    b.onclick = () => {
+                        Array.from(area.children).forEach(x => x.classList.remove('active'));
+                        b.classList.add('active');
+                        answers[item.id] = o;
+                        updateProg();
                     };
-                    interactive.appendChild(btn);
+                    area.appendChild(b);
                 });
             } else {
-                const field = document.createElement('textarea');
-                field.className = 'text-area'; field.placeholder = "Tapez votre réponse détaillée...";
-                field.oninput = () => {
-                    if(field.value.trim().length > 1) dataEntry[item.id] = field.value.trim();
-                    else delete dataEntry[item.id];
-                    updateLiveProgress();
+                const txt = document.createElement('textarea');
+                txt.className = 'text-area'; txt.placeholder = "Votre réponse...";
+                txt.oninput = () => {
+                    if(txt.value.trim().length > 1) answers[item.id] = txt.value.trim();
+                    else delete answers[item.id];
+                    updateProg();
                 };
-                interactive.appendChild(field);
+                area.appendChild(txt);
             }
-            card.appendChild(interactive);
+            card.appendChild(area);
             mount.appendChild(card);
         });
     }
 
-    function updateLiveProgress() {
-        const total = Object.keys(dataEntry).length;
-        document.getElementById('progress-indicator').innerText = `${total} / 25`;
-        document.getElementById('main-submit-btn').disabled = (total === 0);
+    function updateProg() {
+        const count = Object.keys(answers).length;
+        document.getElementById('progress-text').innerText = `${count} / 25`;
+        document.getElementById('submit-all').disabled = (count === 0);
     }
 
-    function saveSubmission() {
-        let database = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        dataEntry._time = new Date().toLocaleString();
-        database.push(dataEntry);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(database));
+    function submitData() {
+        let db = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        answers.timestamp = new Date().toLocaleString();
+        db.push(answers);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
         
-        document.getElementById('survey-container').innerHTML = `
-            <div style="text-align:center; padding:120px 20px;">
-                <img src="1000037018.png" style="width:230px; border-radius:30px; border:4px solid var(--gold); box-shadow: 0 0 30px var(--gold);">
-                <h1 style="color:var(--gold); font-family:'Orbitron'; margin-top:40px; font-size:2.5rem;">TERMINÉ !</h1>
-                <p style="font-size:1.2rem; margin-top:10px; opacity:0.8;">Votre dossier a été transmis avec succès.</p>
-                <button onclick="location.reload()" class="btn-submit" style="margin-top:50px; width:auto; padding:18px 50px; font-size:1.2rem;">RETOUR AU DÉBUT</button>
+        document.getElementById('survey-content').innerHTML = `
+            <div style="text-align:center; padding:100px 20px;">
+                <img src="1000037018.png" style="width:200px; border-radius:20px; border:2px solid var(--gold); box-shadow:0 0 20px var(--gold);">
+                <h2 style="color:var(--gold); font-family:'Orbitron'; margin-top:20px;">DOSSIER TRANSMIS</h2>
+                <button onclick="location.reload()" class="btn-final" style="margin-top:30px; width:auto; padding:15px 40px;">RETOUR</button>
             </div>`;
         window.scrollTo(0,0);
     }
 
-    function showAdminAuth() { document.getElementById('login-modal').style.display = 'flex'; }
+    function openAuth() { document.getElementById('login-modal').style.display = 'flex'; }
 
-    function validateAdmin() {
-        if(document.getElementById('pass-field').value === SECRET_KEY) {
+    function verifyPass() {
+        if(document.getElementById('admin-pass').value === PASS) {
             document.getElementById('login-modal').style.display = 'none';
-            document.getElementById('survey-container').style.display = 'none';
+            document.getElementById('survey-content').style.display = 'none';
             document.getElementById('admin-panel').style.display = 'block';
-            toggleAdminTab('stats');
-        } else { alert("Code de sécurité invalide"); }
+            showTab('stats');
+        } else { alert("Code incorrect"); }
     }
 
-    function toggleAdminTab(tab) {
-        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        const display = document.getElementById('admin-content-area');
+    function showTab(type) {
+        const db = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        const area = document.getElementById('admin-render-area');
         
-        document.getElementById('btn-stats-tab').style.background = tab === 'stats' ? 'var(--gold)' : '#111';
-        document.getElementById('btn-stats-tab').style.color = tab === 'stats' ? '#000' 
+        document.getElementById('tab-stat').style.background = type === 'stats' ? 'var(--gold)' : '#111';
+        document.getElementById('tab-stat').style.color = type === 'stats' ? '#000' : '#fff';
+        document.getElementById('tab-indiv').style.background = type === 'indiv' ? 'var(--gold)' : '#111';
+        document.getElementById('tab-indiv').style.color = type === 'indiv' ? '#000' : '#fff';
+
+        if(db.length === 0) { area.innerHTML = "Aucune donnée."; return; }
+
+        let h = "";
+        if(type === 'stats') {
+            h = `<div style="background:var(--gold); color:#000; padding:15px; border-radius:10px; text-align:center; font-weight:bold; margin-bottom:20px;">PARTICIPANTS: ${db.length}</div>`;
+            questions.forEach(q => {
+                h += `<div class="stat-card"><strong>${q.q}</strong>`;
+                if(q.opt) {
+                    q.opt.forEach(o => {
+                        const count = db.filter(d => d[q.id] === o).length;
+                        const pct = ((count/db.length)*100).toFixed(1);
+                        h += `<div style="font-size:0.8rem; margin-top:10px; display:flex; justify-content:space-between;"><span>${o}</span><span>${count} (${pct}%)</span></div>
+                              <div class="bar-container"><div class="bar-fill" style="width:${pct}%"></div></div>`;
+                    });
+                } else {
+                    const comments = db.map(d => d[q.id]).filter(v => v);
+                    h += `<div style="margin-top:10px;">` + comments.map(c => `<div class="comment-item">"${c}"</div>`).join('') + `</div>`;
+                }
+                h += `</div>`;
+            });
+        } else {
+            db.forEach((entry, i) => {
+                h += `<div class="stat-card" style="border-top:4px solid var(--gold);">
+                        <div style="color:var(--gold); font-weight:bold; margin-bottom:10px;">Dossier #${i+1} <span style="font-size:0.7rem; color:#555; float:right;">${entry.timestamp}</span></div>`;
+                questions.forEach(q => {
+                    h += `<p style="font-size:0.8rem; margin-bottom:5px;"><span style="color:#666;">${q.q}:</span> ${entry[q.id] || '-'}</p>`;
+                });
+                h += `</div>`;
+            });
+        }
+        area.innerHTML = h;
+        window.scrollTo(0,0);
+    }
+</script>
+
+</body>
+</html>
+

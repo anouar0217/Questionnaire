@@ -2,104 +2,345 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Angioscanner Cloud Master System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Raleway:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANGIO-SCANNER - Étude Gériatrie</title>
     <style>
-        :root { --gold: #ffcc00; --bg: #000; --card: #0c0c0c; }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; font-family: 'Raleway', sans-serif; overflow-x: hidden; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
 
-        /* شاشة الترحيب */
+        body {
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        /* شاشة البداية */
         #welcome-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999; background: #000; display: flex; align-items: center; justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
             flex-direction: column;
-        }
-        .stickers-layer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; opacity: 0.2; pointer-events: none;
-        }
-        .sticker { position: absolute; font-size: 2.5rem; animation: floatAnim 10s infinite linear; }
-        @keyframes floatAnim {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
         }
 
-        .logo-btn {
-            position: relative; z-index: 100; width: 220px; height: 220px;
-            border-radius: 50%; border: 6px solid var(--gold);
-            box-shadow: 0 0 30px var(--gold); cursor: pointer;
-            overflow: hidden; animation: pulse 2s infinite;
-            background: #000; display: flex; align-items: center; justify-content: center;
+        .logo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 4px solid #ffcc00;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 0 30px #ffcc00;
+            animation: pulse 2s infinite;
         }
-        .logo-btn img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-        /* التطبيق الرئيسي */
-        #app-content { display: none; }
-        .navbar { position: sticky; top: 0; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--gold); padding: 15px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        .section-title { background: rgba(255,204,0,0.1); color: var(--gold); font-family: 'Orbitron'; padding: 15px; margin: 30px 0; border-radius: 12px; border: 1px solid var(--gold); text-align: center; font-weight: bold; }
-        .q-card { background: var(--card); border-radius: 20px; padding: 25px; margin-bottom: 25px; border: 1px solid #222; }
-        .opt-btn { width: 100%; text-align: left; padding: 16px; margin: 8px 0; background: #111; border: 1px solid #333; color: #fff; border-radius: 12px; cursor: pointer; font-size: 1rem; transition: 0.2s; }
-        .opt-btn.active { background: var(--gold); color: #000; font-weight: 900; }
-        .text-area { width: 100%; background: #000; color: var(--gold); padding: 15px; border-radius: 12px; border: 1px solid #444; min-height: 100px; outline: none; }
-        .submit-btn { width: 100%; background: var(--gold); color: #000; border: none; padding: 20px; border-radius: 15px; font-family: 'Orbitron'; font-weight: 900; font-size: 1.2rem; cursor: pointer; margin: 30px 0 60px; }
-        .submit-btn:disabled { background: #333; cursor: not-allowed; opacity: 0.5; }
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-        /* لوحة النتائج */
-        .admin-view { display: none; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 10px; background: #222; border: none; color: #fff; cursor: pointer; border-radius: 5px; font-family: 'Orbitron'; }
-        .tab-btn.active { background: var(--gold); color: #000; }
-        .voter-card { background: #111; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--gold); cursor: pointer; }
-        .stat-bar { height: 10px; background: #222; border-radius: 5px; margin: 5px 0 15px; overflow: hidden; }
-        .stat-fill { height: 100%; background: var(--gold); }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
 
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; color: var(--gold); font-family: 'Orbitron'; }
+        h1 {
+            color: #ffcc00;
+            margin-top: 30px;
+            letter-spacing: 5px;
+        }
+
+        /* المحتوى الرئيسي */
+        #main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            display: none;
+        }
+
+        .header {
+            background: #111;
+            border-bottom: 2px solid #ffcc00;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+
+        /* أقسام الأسئلة */
+        .section-title {
+            background: rgba(255,204,0,0.1);
+            color: #ffcc00;
+            padding: 15px;
+            margin: 30px 0 15px;
+            border-left: 4px solid #ffcc00;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .question-card {
+            background: #111;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            color: #ffcc00;
+            margin-right: 8px;
+        }
+
+        .option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 15px;
+            margin: 8px 0;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            border-color: #ffcc00;
+        }
+
+        .option.selected {
+            background: #ffcc00;
+            color: black;
+            font-weight: bold;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 15px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 30px 0;
+        }
+
+        .btn-submit:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        /* شاشة النجاح */
+        .success-screen {
+            text-align: center;
+            padding: 50px 20px;
+            background: #111;
+            border-radius: 20px;
+        }
+
+        .success-screen img {
+            width: 150px;
+            border-radius: 20px;
+            border: 3px solid #ffcc00;
+            margin-bottom: 30px;
+        }
+
+        .success-screen h2 {
+            color: #ffcc00;
+            margin: 20px 0;
+        }
+
+        /* شاشة التحميل */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 2000;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #333;
+            border-top-color: #ffcc00;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* رابط الإدارة */
+        .admin-link {
+            text-align: center;
+            color: #333;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .admin-link:hover {
+            color: #ffcc00;
+        }
+
+        /* لوحة الإدارة */
+        #admin-panel {
+            display: none;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-header h2 {
+            color: #ffcc00;
+        }
+
+        .exit-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            background: #222;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .tab.active {
+            background: #ffcc00;
+            color: black;
+        }
+
+        .stat-card {
+            background: #111;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .stat-bar {
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            margin: 8px 0;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: #ffcc00;
+            border-radius: 4px;
+        }
+
+        .response-card {
+            background: #111;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffcc00;
+        }
     </style>
 </head>
 <body>
 
+<!-- شاشة التحميل -->
 <div id="loader">
-    <div style="border:4px solid #111; border-top-color:var(--gold); width:40px; height:40px; border-radius:50%; animation:spin 1s linear infinite;"></div>
-    <p style="margin-top:20px;">SYNC SATELLITE...</p>
+    <div class="spinner"></div>
+    <p style="margin-top: 20px; color: #ffcc00;">Connexion au cloud Firebase...</p>
 </div>
-<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
+<!-- شاشة البداية مع اللوغو -->
 <div id="welcome-screen">
-    <div class="stickers-layer" id="stickers-mount"></div>
-    <div class="logo-btn" onclick="initApp()">
-        <img src="1000033460.jpg" alt="Logo">
+    <div class="logo" onclick="startApp()">  <!-- تم التعديل هنا: startApp() وليس initApp() -->
+        <img src="1000033460.jpg" alt="Logo INFSPM" onerror="this.style.backgroundColor='#ffcc00'">
     </div>
-    <h1 style="font-family:'Orbitron'; color:var(--gold); margin-top:30px; letter-spacing:8px;">WELCOME</h1>
-    <p style="color:#555; margin-top:10px;">TOUCHER POUR COMMENCER</p>
+    <h1>WELCOME</h1>
+    <p style="color: #666; margin-top: 10px;">Cliquez sur le logo pour commencer</p>
 </div>
 
-<div id="app-content">
-    <nav class="navbar">
-        <div style="font-family:'Orbitron'; color:var(--gold); font-weight:900;">INFSPM</div>
-        <div id="prog-val" style="color:var(--gold); font-family:'Orbitron';">0 / 25</div>
-    </nav>
-
-    <div class="container" id="survey-ui">
-        <div id="questions-mount"></div>
-        <button id="main-submit" class="submit-btn" disabled onclick="pushToCloud()">FINALISER & ENVOYER</button>
-        <p onclick="adminGate()" style="text-align:center; color:#333; cursor:pointer;">Admin Console</p>
+<!-- المحتوى الرئيسي -->
+<div id="main-content">
+    <div class="header">
+        <span style="font-weight: bold;">INFSPM</span>
+        <span class="progress" id="progress">0 / 25</span>
     </div>
 
-    <div class="container admin-view" id="admin-ui">
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-            <h2 style="font-family:'Orbitron'; color:var(--gold);">CONSOLE CLOUD</h2>
-            <button onclick="location.reload()" style="background:red; color:white; border:none; padding:5px 15px; border-radius:5px;">SORTIR</button>
+    <!-- الأسئلة ستظهر هنا -->
+    <div id="questions-container"></div>
+
+    <button class="btn-submit" id="submitBtn" onclick="sendAnswers()" disabled>FINALISER & ENVOYER</button>
+
+    <div class="admin-link" onclick="openAdmin()">⚙️ Admin Console</div>
+
+    <!-- لوحة الإدارة -->
+    <div id="admin-panel">
+        <div class="admin-header">
+            <h2>CONSOLE ADMIN</h2>
+            <button class="exit-btn" onclick="location.reload()">SORTIR</button>
         </div>
-        
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('stats')">ANALYSES</button>
-            <button class="tab-btn" onclick="switchTab('voters')">RÉPONSES INDIV.</button>
+
+        <div class="tab-bar">
+            <button class="tab active" onclick="switchTab('stats')">STATISTIQUES</button>
+            <button class="tab" onclick="switchTab('individuals')">RÉPONSES</button>
         </div>
 
         <div id="admin-content"></div>
@@ -107,278 +348,239 @@
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    // ========== 1. CONFIGURATION FIREBASE ==========
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Configuration Firebase - Remplacez ces valeurs par votre configuration
+    // 🔴🔴🔴 السطور التي يجب تغييرها - استبدل القيم فقط بين علامتي التنصيص 🔴🔴🔴
     const firebaseConfig = {
-        apiKey: "VOTRE_API_KEY",
-        authDomain: "VOTRE_AUTH_DOMAIN",
-        projectId: "VOTRE_PROJECT_ID",
-        storageBucket: "VOTRE_STORAGE_BUCKET",
-        messagingSenderId: "VOTRE_MESSAGING_SENDER_ID",
-        appId: "VOTRE_APP_ID"
+        apiKey: "AIzaSyDkKEdm85pDRJ5PgaSdn-lxBRyu0uZPF4Y",          // <--- غيّر هذا فقط
+        authDomain: "angioscanner-survey.firebaseapp.com", // <--- غيّر هذا فقط
+        projectId: "angioscanner-survey",                // <--- غيّر هذا فقط
+        storageBucket: "angioscanner-survey.firebasestorage.app", // <--- غيّر هذا فقط
+        messagingSenderId: "768907518533",                   // <--- غيّر هذا فقط
+        appId: "1:768907518533:web:21a3de5ca64416a1b2792c"                   // <--- غيّر هذا فقط
     };
 
+    // تهيئة Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const auth = getAuth(app);
-    const COLLECTION_NAME = 'angioscanner_responses';
+    const COLLECTION_NAME = "reponses_angioscanner";
 
-    let user = null;
-    let results = {};
-    let cloudRecords = [];
-    let currentTab = 'stats';
-
-    signInAnonymously(auth).catch(error => {
-        console.error("Erreur d'authentification:", error);
-        alert("Erreur de connexion à Firebase. Vérifiez votre configuration.");
-    });
-    
-    onAuthStateChanged(auth, u => user = u);
-
-    // ملصقات الخلفية
-    const radIcons = ['🩻', '☢️', '🧠', '🦴', '🧬', '🏥', '🩺', '⚕️'];
-    const mount = document.getElementById('stickers-mount');
-    for(let i=0; i<15; i++) {
-        const s = document.createElement('span');
-        s.className = 'sticker';
-        s.innerText = radIcons[Math.floor(Math.random()*radIcons.length)];
-        s.style.left = Math.random()*90 + '%';
-        s.style.animationDelay = Math.random()*10 + 's';
-        mount.appendChild(s);
-    }
-
+    // ========== 2. QUESTIONS - Copie conforme du fichier Word ==========
     const questions = [
-        { id: 1, section: "I. Données Socio-démographiques", q: "Quel est votre sexe ?", opt: ["Masculin", "Féminin"] },
-        { id: 2, q: "Quelle est votre tranche d'âge ?", opt: ["20 – 30 ans", "31 – 40 ans", "41 – 50 ans", "Plus de 50 ans"] },
-        { id: 3, q: "Combien d'années d'expérience avez-vous dans le domaine de la radiologie ?", opt: ["Moins de 5 ans", "5 – 10 ans", "11 – 20 ans", "Plus de 20 ans"] },
-        { id: 4, q: "Quel est votre grade actuel (Manipulateur, Médecin, etc.) ?", type: "text" },
-        { id: 5, q: "Dans quel type d'établissement travaillez-vous ?", opt: ["EPH", "Clinique privée"] },
-        { id: 6, section: "II. Pratique de l'Angioscanner", q: "Réalisez-vous régulièrement des examens d'angioscanner ?", opt: ["Oui", "Non"] },
-        { id: 7, q: "Combien d'angioscanners réalisez-vous par mois ?", opt: ["0 – 5", "6 – 10", "11 – 20", "Plus de 20"] },
-        { id: 8, q: "L'angioscanner est-il pour vous l'examen de première intention ?", opt: ["Oui", "Non"] },
-        { id: 9, q: "Maîtrisez-vous parfaitement le protocole technique ?", opt: ["Oui", "Non"] },
-        { id: 10, q: "Disposez-vous d'un injecteur automatique ?", opt: ["Oui", "Non"] },
-        { id: 11, section: "III. Le Sujet Âgé & Communication", q: "Recevez-vous fréquemment des patients âgés (+65 ans) ?", opt: ["Oui", "Non"] },
-        { id: 12, q: "La réalisation d'un angioscanner chez un sujet âgé présente-t-elle plus de difficultés ?", opt: ["Oui", "Non"] },
-        { id: 13, q: "Quelle est la principale difficulté rencontrée ?", opt: ["Communication", "Agitation", "Accès veineux"] },
-        { id: 14, q: "Adaptez-vous votre façon d'expliquer l'examen ?", opt: ["Oui", "Non"] },
-        { id: 15, q: "Quelle technique de communication privilégiez-vous ?", opt: ["Lentement/Fort", "Gestes", "Accompagnant"] },
-        { id: 16, q: "Pensez-vous qu'une bonne communication influence la qualité de l'image ?", opt: ["Oui", "Non"] },
-        { id: 17, q: "Avez-vous déjà dû recommencer une acquisition à cause d'un défaut de communication ?", opt: ["Oui", "Non"] },
-        { id: 18, q: "Prenez-vous plus de temps pour la préparation psychologique ?", opt: ["Oui", "Non"] },
-        { id: 19, q: "La présence d'un proche facilite-elle la coopération ?", opt: ["Oui", "Non"] },
-        { id: 20, section: "IV. Formation & Solutions", q: "Avez-vous reçu une formation spécifique sur la communication ?", opt: ["Oui", "Non"] },
-        { id: 21, q: "Pensez-vous que le rôle du manipulateur est déterminant ?", opt: ["Oui", "Non"] },
-        { id: 22, q: "Quel est le facteur le plus important ?", opt: ["Technique", "Communication", "Rapidité"] },
-        { id: 23, q: "Arrivez-vous généralement à trouver des solutions ?", opt: ["Oui", "Non"] },
-        { id: 24, q: "Quelles sont vos stratégies pour rassurer un patient anxieux ?", type: "text" },
-        { id: 25, q: "Quelles sont vos suggestions pour améliorer la prise en charge ?", type: "text" }
+        // I. Informations professionnelles
+        { id: 1, section: "I. Informations professionnelles", text: "Sexe :", options: ["Masculin", "Féminin"] },
+        { id: 2, text: "Tranche d'âge :", options: ["20-30", "31-40", "41-50", ">50"] },
+        { id: 3, text: "Années d'expérience :", options: ["<5 ans", "5-10 ans", "11-20 ans", ">20 ans"] },
+        { id: 4, text: "Grade :", options: ["MIMSP", "MIM spécialiste", "Autre"] },
+        { id: 5, text: "Type d'établissement :", options: ["Hôpital public", "Clinique privée"] },
+        
+        // II. Expérience en angioscanner thoracique
+        { id: 6, section: "II. Expérience en angioscanner thoracique", text: "Réalisez-vous régulièrement des angioscanners thoraciques ?", options: ["Oui", "Non"] },
+        { id: 7, text: "Nombre d'examens par mois :", options: ["0-5", "6-10", "11-20", ">20"] },
+        { id: 8, text: "L'angioscanner est-il l'examen de première intention pour la suspicion d'embolie pulmonaire ?", options: ["Oui", "Non"] },
+        { id: 9, text: "Maîtrisez-vous le protocole technique ?", options: ["Oui", "Non"] },
+        { id: 10, text: "Injecteur automatique disponible ?", options: ["Oui", "Non"] },
+        
+        // III. Prise en charge des patients âgés
+        { id: 11, section: "III. Prise en charge des patients âgés", text: "Recevez-vous fréquemment des patients âgés (>65 ans) ?", options: ["Oui", "Non"] },
+        { id: 12, text: "Les patients âgés présentent-ils plus de difficultés lors de l'examen ?", options: ["Oui", "Non"] },
+        { id: 13, text: "Principales difficultés :", options: ["Difficulté de communication", "Difficulté de compréhension", "Agitation ou anxiété", "Difficulté de positionnement", "Pathologies associées", "Autres"] },
+        { id: 14, text: "Adaptez-vous votre explication de l'examen ?", options: ["Oui", "Non"] },
+        { id: 15, text: "Techniques utilisées pour faciliter la communication :", options: ["Parler lentement", "Utiliser des gestes", "Répéter les consignes", "Impliquer un accompagnant"] },
+        
+        // IV. Communication gériatrique
+        { id: 16, section: "IV. Communication gériatrique", text: "La communication influence-t-elle la qualité de l'examen ?", options: ["Oui", "Non"] },
+        { id: 17, text: "Les difficultés de communication peuvent-elles provoquer des artéfacts ?", options: ["Oui", "Non"] },
+        { id: 18, text: "Prenez-vous plus de temps avec les patients âgés ?", options: ["Oui", "Non"] },
+        { id: 19, text: "La présence d'un accompagnant améliore-t-elle la coopération ?", options: ["Oui", "Non"] },
+        { id: 20, text: "Avez-vous reçu une formation en communication gériatrique ?", options: ["Oui", "Non"] },
+        
+        // V. Qualité de l'examen et rôle du manipulateur
+        { id: 21, section: "V. Qualité de l'examen et rôle du manipulateur", text: "Le manipulateur joue-t-il un rôle essentiel dans la réussite de l'examen ?", options: ["Oui", "Non"] },
+        { id: 22, text: "Facteurs influençant la qualité de l'examen :", options: ["Préparation du patient", "Choix du protocole", "Communication", "Expérience du manipulateur", "Qualité de l'équipement"] },
+        { id: 23, text: "Trouvez-vous des solutions face aux difficultés avec les patients âgés ?", options: ["Oui", "Non"] },
+        { id: 24, text: "Si oui, quelles stratégies utilisez-vous ?", type: "text" },
+        { id: 25, text: "Quelles améliorations proposez-vous pour la prise en charge des patients âgés ?", type: "text" }
     ];
 
-    window.initApp = () => {
+    // ========== 3. VARIABLES GLOBALES ==========
+    let answers = {};
+    let allResponses = [];
+    let currentTab = 'stats';
+
+    // ========== 4. FONCTION POUR COMMENCER ==========
+    window.startApp = function() {
         document.getElementById('welcome-screen').style.display = 'none';
-        document.getElementById('app-content').style.display = 'block';
-        const qMount = document.getElementById('questions-mount');
-        if(qMount.children.length > 0) return;
-        
+        document.getElementById('main-content').style.display = 'block';
+        renderQuestions();
+    };
+
+    // ========== 5. AFFICHER LES QUESTIONS ==========
+    function renderQuestions() {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = '';
+
         questions.forEach(q => {
-            if(q.section) {
-                const s = document.createElement('div'); 
-                s.className = 'section-title'; 
-                s.innerText = q.section; 
-                qMount.appendChild(s);
+            // Titre de section
+            if (q.section) {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section-title';
+                sectionDiv.textContent = q.section;
+                container.appendChild(sectionDiv);
             }
+
+            // Carte question
+            const card = document.createElement('div');
+            card.className = 'question-card';
             
-            const card = document.createElement('div'); 
-            card.className = 'q-card';
-            card.innerHTML = `<p style="margin-bottom:15px; font-weight:bold;">${q.id}. ${q.q}</p>`;
-            
-            const box = document.createElement('div');
-            
-            if(q.opt) {
-                q.opt.forEach(o => {
-                    const b = document.createElement('button'); 
-                    b.className = 'opt-btn'; 
-                    b.innerText = o;
-                    b.onclick = () => {
-                        Array.from(box.children).forEach(el => el.classList.remove('active'));
-                        b.classList.add('active'); 
-                        results[q.id] = o; 
+            const qText = document.createElement('div');
+            qText.className = 'question-text';
+            qText.innerHTML = `<span class="question-number">${q.id}.</span> ${q.text}`;
+            card.appendChild(qText);
+
+            // Options ou texte
+            if (q.options) {
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option';
+                    btn.textContent = opt;
+                    btn.onclick = function() {
+                        // Enlever la sélection précédente
+                        card.querySelectorAll('.option').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        answers[q.id] = opt;
                         updateProgress();
                     };
-                    box.appendChild(b);
+                    card.appendChild(btn);
                 });
             } else {
-                const t = document.createElement('textarea'); 
-                t.className = 'text-area'; 
-                t.placeholder = "Tapez ici...";
-                t.oninput = () => { 
-                    if(t.value.trim()){
-                        results[q.id] = t.value.trim();
-                    } else {
-                        delete results[q.id];
-                    } 
-                    updateProgress(); 
+                const textarea = document.createElement('textarea');
+                textarea.className = 'text-input';
+                textarea.placeholder = 'Votre réponse...';
+                textarea.oninput = function(e) {
+                    answers[q.id] = e.target.value;
+                    updateProgress();
                 };
-                box.appendChild(t);
+                card.appendChild(textarea);
             }
-            
-            card.appendChild(box); 
-            qMount.appendChild(card);
-        });
-    };
 
+            container.appendChild(card);
+        });
+    }
+
+    // ========== 6. METTRE À JOUR LA PROGRESSION ==========
     function updateProgress() {
-        const count = Object.keys(results).length;
-        document.getElementById('prog-val').innerText = `${count} / 25`;
-        document.getElementById('main-submit').disabled = count === 0;
+        const count = Object.keys(answers).length;
+        document.getElementById('progress').textContent = `${count} / 25`;
+        document.getElementById('submitBtn').disabled = count < 25;
     }
 
-    window.pushToCloud = async () => {
-        if(!user) {
-            alert("Veuillez patienter, authentification en cours...");
+    // ========== 7. ENVOYER LES RÉPONSES À FIREBASE ==========
+    window.sendAnswers = async function() {
+        if (Object.keys(answers).length < 25) {
+            alert('Veuillez répondre à toutes les questions.');
             return;
         }
-        
-        if(Object.keys(results).length < 25) {
-            alert("Veuillez répondre à toutes les questions avant d'envoyer.");
-            return;
-        }
-        
-        document.getElementById('loader').style.display = 'flex';
-        
+
+        showLoader(true);
+
         try {
-            await addDoc(collection(db, COLLECTION_NAME), { 
-                ...results, 
-                voterId: user.uid, 
-                date: new Date().toISOString() 
+            const dataToSend = {
+                ...answers,
+                date: new Date().toISOString(),
+                timestamp: Date.now()
+            };
+
+            await addDoc(collection(db, COLLECTION_NAME), dataToSend);
+            
+            // Afficher l'écran de succès avec l'image de remerciement
+            const container = document.getElementById('questions-container');
+            container.innerHTML = `
+                <div class="success-screen">
+                    <img src="1000037018.png" alt="Merci" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22><circle cx=%2275%22 cy=%2275%22 r=%2270%22 fill=%22%23ffcc00%22/><text x=%2275%22 y=%2290%22 font-size=%2250%22 text-anchor=%22middle%22 fill=%22%23000%22>✓</text></svg>'">
+                    <h2>ENVOYÉ AVEC SUCCÈS</h2>
+                    <p>Merci pour votre participation.</p>
+                    <button onclick="location.reload()" class="btn-submit" style="width: auto; padding: 12px 40px;">RETOUR</button>
+                </div>
+            `;
+            
+            document.getElementById('submitBtn').style.display = 'none';
+            
+        } catch (error) {
+            console.error('Erreur Firebase:', error);
+            alert('Erreur de connexion à Firebase. Vérifiez votre configuration.');
+        } finally {
+            showLoader(false);
+        }
+    };
+
+    // ========== 8. FONCTIONS ADMIN ==========
+    window.openAdmin = async function() {
+        const code = prompt('Code admin:');
+        if (code !== 'anwar17blt') {
+            alert('Code incorrect');
+            return;
+        }
+
+        showLoader(true);
+
+        try {
+            const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
+            allResponses = [];
+            querySnapshot.forEach(doc => {
+                allResponses.push({ id: doc.id, ...doc.data() });
             });
-            
-            document.getElementById('survey-ui').innerHTML = `
-                <div style="text-align:center; padding:100px 20px;">
-                    <img src="1000037018.png" style="width:140px; border:2px solid var(--gold); border-radius:30px;">
-                    <h2 style="color:var(--gold); margin-top:20px;">ENVOYÉ AVEC SUCCÈS</h2>
-                    <p style="opacity:0.6;">Merci pour votre contribution professionnelle.</p>
-                    <button onclick="location.reload()" class="submit-btn" style="width:auto; padding:10px 40px;">RETOUR</button>
-                </div>`;
-        } catch(e) { 
-            console.error("Erreur d'envoi:", e);
-            alert("Erreur de connexion. Vérifiez votre connexion internet et réessayez."); 
-        }
-        
-        document.getElementById('loader').style.display = 'none';
-    };
 
-    window.adminGate = async () => {
-        const pin = prompt("Code Secret :");
-        if(pin === 'anwar17blt') {
-            document.getElementById('loader').style.display = 'flex';
+            // Cacher les éléments normaux
+            document.querySelector('.header').style.display = 'none';
+            document.getElementById('questions-container').style.display = 'none';
+            document.getElementById('submitBtn').style.display = 'none';
+            document.querySelector('.admin-link').style.display = 'none';
             
-            try {
-                const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
-                cloudRecords = [];
-                
-                querySnapshot.forEach((doc) => {
-                    cloudRecords.push({ id: doc.id, ...doc.data() });
-                });
-                
-                document.getElementById('survey-ui').style.display = 'none';
-                document.getElementById('admin-ui').style.display = 'block';
-                renderAdmin();
-                
-            } catch(e) { 
-                console.error("Erreur de chargement:", e);
-                alert("Erreur lors du chargement des données."); 
-            }
+            // Afficher le panneau admin
+            document.getElementById('admin-panel').style.display = 'block';
             
-            document.getElementById('loader').style.display = 'none';
+            renderAdminPanel();
+            
+        } catch (error) {
+            console.error('Erreur chargement admin:', error);
+            alert('Erreur lors du chargement des données');
+        } finally {
+            showLoader(false);
         }
     };
 
-    window.switchTab = (tab) => {
+    window.switchTab = function(tab) {
         currentTab = tab;
-        document.querySelectorAll('.tab-btn').forEach(b => {
-            const btnText = b.innerText.toLowerCase();
-            b.classList.toggle('active', btnText.includes(tab));
-        });
-        renderAdmin();
+        
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        renderAdminPanel();
     };
 
-    function renderAdmin() {
-        const area = document.getElementById('admin-content');
+    function renderAdminPanel() {
+        const content = document.getElementById('admin-content');
         
-        if(currentTab === 'stats') {
-            let h = `<div style="text-align:center; margin-bottom:20px; color:var(--gold);">
-                Nombre de participants : ${cloudRecords.length}
-            </div>`;
-            
-            if(cloudRecords.length === 0) {
-                h += '<div style="text-align:center; padding:40px;">Aucune donnée disponible</div>';
-            } else {
-                questions.forEach(q => {
-                    h += `<div class="q-card"><strong>Q${q.id}. ${q.q}</strong>`;
-                    
-                    if(q.opt) {
-                        q.opt.forEach(o => {
-                            const count = cloudRecords.filter(r => r[q.id] === o).length;
-                            const p = cloudRecords.length ? ((count/cloudRecords.length)*100).toFixed(1) : 0;
-                            h += `
-                                <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-top:10px;">
-                                    <span>${o}</span>
-                                    <span>${p}% (${count})</span>
-                                </div>
-                                <div class="stat-bar">
-                                    <div class="stat-fill" style="width:${p}%"></div>
-                                </div>`;
-                        });
-                    } else {
-                        h += `<div style="font-size:0.75rem; color:#888; margin-top:10px;">
-                            (Voir Réponses Individuelles pour les textes)
-                        </div>`;
-                    }
-                    
-                    h += `</div>`;
-                });
-            }
-            
-            area.innerHTML = h;
-            
-        } else {
-            let h = '';
-            
-            if(cloudRecords.length === 0) {
-                h = '<div style="text-align:center; padding:40px;">Aucune réponse disponible</div>';
-            } else {
-                cloudRecords.forEach((r, idx) => {
-                    const dateStr = r.date ? new Date(r.date).toLocaleString() : 'Date inconnue';
-                    
-                    h += `
-                        <div class="voter-card">
-                            <strong>Participant #${idx+1}</strong>
-                            <br><small>Date: ${dateStr}</small>
-                            <div style="margin-top:10px; font-size:0.8rem; background:#000; padding:10px; border-radius:5px;">`;
-                    
-                    questions.forEach(q => {
-                        if(r[q.id]) {
-                            h += `<p style="margin-bottom:5px;">
-                                <span style="color:var(--gold)">Q${q.id}:</span> ${r[q.id]}
-                            </p>`;
-                        }
-                    });
-                    
-                    h += `</div></div>`;
-                });
-            }
-            
-            area.innerHTML = h;
+        if (allResponses.length === 0) {
+            content.innerHTML = '<div style="text-align: center; padding: 50px;">Aucune réponse pour le moment</div>';
+            return;
         }
-        
-        window.scrollTo(0, 0);
-    }
-</script>
 
-</body>
-</html>
+        if (currentTab === 'stats') {
+            let html = `<h3 style="margin-bottom: 20px;">Total: ${allResponses.length} participants</h3>`;
+
+            questions.forEach(q => {
+                if (!q.options) return;
+                
+                html += '<div class="stat-card">';
+                html += `<h4>Q${q.id}. ${q.text}</h4>`;
+
+                const counts = {};
+                q.options.forEach(opt => counts[opt] = 0);
+
+                allResponses.forEach(r => {
+                    if (r[q.id] && counts.hasOwnProperty(r[q.id])) {
+              

@@ -6,23 +6,30 @@
     <title>ANGIO-SCANNER - Étude Gériatrie</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background: #0a0a0a; color: white; }
+        body { background: #0a0a0a; color: white; overflow-x: hidden; }
 
         /* شاشة البداية */
         #welcome-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: black; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; z-index: 1000;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
         }
 
         .logo {
-            width: 200px; height: 200px; border-radius: 50%;
-            border: 4px solid #ffcc00; overflow: hidden; cursor: pointer;
-            box-shadow: 0 0 30px #ffcc00; animation: pulse 2s infinite;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            border: 4px solid #ffcc00;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 0 30px #ffcc00;
+            animation: pulse 2s infinite;
         }
-
-        .logo img { width: 100%; height: 100%; object-fit: cover; }
-
+        .logo img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
         @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
 
         h1 { color: #ffcc00; margin-top: 30px; letter-spacing: 5px; }
@@ -31,431 +38,391 @@
         #main-content { max-width: 800px; margin: 0 auto; padding: 20px; display: none; }
 
         .header {
-            background: #111; border-bottom: 2px solid #ffcc00;
-            padding: 15px; display: flex; justify-content: space-between;
-            position: sticky; top: 0; margin-bottom: 20px;
+            background: #111;
+            border-bottom: 2px solid #ffcc00;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-bottom: 20px;
         }
 
         .progress { color: #ffcc00; font-weight: bold; }
 
-        /* أقسام الأسئلة */
         .section-title {
-            background: rgba(255,204,0,0.1); color: #ffcc00;
-            padding: 15px; margin: 30px 0 15px;
-            border-left: 4px solid #ffcc00; font-weight: bold;
+            background: rgba(255,204,0,0.1);
+            color: #ffcc00;
+            padding: 15px;
+            margin: 30px 0 15px;
+            border-left: 4px solid #ffcc00;
+            font-weight: bold;
             font-size: 1.2rem;
         }
 
         .question-card {
-            background: #111; border-radius: 10px; padding: 20px;
-            margin-bottom: 20px; border: 1px solid #333;
+            background: #111;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
         }
 
         .question-text { font-weight: bold; margin-bottom: 15px; line-height: 1.5; }
         .question-number { color: #ffcc00; margin-right: 8px; }
 
         .option {
-            display: block; width: 100%; text-align: left;
-            padding: 15px; margin: 8px 0; background: #1a1a1a;
-            border: 1px solid #333; color: white; border-radius: 8px;
-            cursor: pointer; transition: 0.2s;
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 15px;
+            margin: 8px 0;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
         }
-
         .option:hover { border-color: #ffcc00; }
-        .option.selected { background: #ffcc00; color: black; font-weight: bold; }
+        .option.selected { background: #ffcc00; color: black; font-weight: bold; border-color: #ffcc00; }
 
         .text-input {
-            width: 100%; padding: 15px; background: #1a1a1a;
-            border: 1px solid #333; color: white; border-radius: 8px;
-            min-height: 120px; font-size: 1rem;
+            width: 100%;
+            padding: 15px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 8px;
+            min-height: 120px;
+            font-size: 1rem;
+            resize: vertical;
         }
 
         .btn-submit {
-            width: 100%; background: #ffcc00; color: black;
-            border: none; padding: 20px; border-radius: 10px;
-            font-weight: bold; font-size: 1.2rem; cursor: pointer;
-            margin: 30px 0; transition: 0.2s;
+            width: 100%;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 30px 0;
+            transition: 0.2s;
         }
-
-        .btn-submit:hover:not(:disabled) { background: #e6b800; transform: scale(1.02); }
+        .btn-submit:hover:not(:disabled) { background: #e6b800; transform: scale(1.01); }
         .btn-submit:disabled { background: #333; color: #666; cursor: not-allowed; }
 
-        /* شاشة النجاح */
-        .success-screen {
-            text-align: center; padding: 50px 20px;
-            background: #111; border-radius: 20px;
-        }
-
-        .success-screen img {
-            width: 150px; border-radius: 20px;
-            border: 3px solid #ffcc00; margin-bottom: 30px;
-        }
-
+        .success-screen { text-align: center; padding: 50px 20px; background: #111; border-radius: 20px; }
+        .success-screen img { width: 120px; border-radius: 15px; margin-bottom: 20px; }
         .success-screen h2 { color: #ffcc00; margin: 20px 0; }
 
-        /* شاشة التحميل */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); display: none;
-            align-items: center; justify-content: center; flex-direction: column;
-            z-index: 2000;
+            background: rgba(0,0,0,0.85);
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column; z-index: 2000;
         }
-
         .spinner {
-            width: 40px; height: 40px; border: 4px solid #333;
-            border-top-color: #ffcc00; border-radius: 50%;
+            width: 40px; height: 40px;
+            border: 4px solid #333;
+            border-top-color: #ffcc00;
+            border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .admin-link { text-align: center; color: #333; cursor: pointer; margin: 20px 0; }
+        .admin-link { text-align: center; color: #444; cursor: pointer; margin: 40px 0; font-size: 0.9rem; }
         .admin-link:hover { color: #ffcc00; }
 
-        #admin-panel { display: none; }
-        .admin-header {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 20px;
-        }
+        #admin-panel { background: #111; border-radius: 10px; padding: 20px; margin-top: 30px; display: none; border: 1px solid #ffcc00; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .admin-header h2 { color: #ffcc00; }
-        .exit-btn {
-            background: red; color: white; border: none;
-            padding: 10px 20px; border-radius: 5px; cursor: pointer;
-        }
-        .response-card {
-            background: #111; padding: 15px; margin-bottom: 10px;
-            border-left: 4px solid #ffcc00; border-radius: 8px;
-        }
+        .exit-btn { background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+
+        .login-area { background: #1a1a1a; padding: 30px; border-radius: 10px; text-align: center; }
+        .login-area input { width: 100%; padding: 15px; margin: 15px 0; background: #111; border: 1px solid #333; color: white; border-radius: 8px; text-align: center; }
+        .login-area button { background: #ffcc00; color: black; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
+
+        .data-area { display: none; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 12px; background: #222; border: none; color: white; cursor: pointer; border-radius: 5px; }
+        .tab.active { background: #ffcc00; color: black; font-weight: bold; }
+
+        .stat-item { background: #1a1a1a; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
+        .stat-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
+        .stat-bar-bg { height: 10px; background: #333; border-radius: 5px; overflow: hidden; }
+        .stat-bar-fill { height: 100%; background: #ffcc00; transition: width 0.5s ease-out; }
+
+        .response-card { background: #1a1a1a; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 3px solid #ffcc00; }
+        .response-date { font-size: 0.8rem; color: #666; margin-bottom: 10px; }
+        .answer-row { font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid #222; }
+        .ans-q { color: #ffcc00; font-weight: bold; margin-right: 5px; }
     </style>
 </head>
 <body>
 
-<!-- شاشة التحميل -->
-<div id="loader"><div class="spinner"></div><p style="margin-top:20px;color:#ffcc00;">Connexion au cloud Firebase...</p></div>
-
-<!-- شاشة البداية -->
-<div id="welcome-screen">
-    <div class="logo" id="startButton">
-        <img src="1000033460.jpg" alt="Logo INFSPM" onerror="this.style.backgroundColor='#ffcc00'">
-    </div>
-    <h1>WELCOME</h1>
-    <p style="color:#666;margin-top:10px;">Cliquez sur le logo pour commencer</p>
+<div id="loader">
+    <div class="spinner"></div>
+    <p style="margin-top:20px;color:#ffcc00;">Traitement en cours...</p>
 </div>
 
-<!-- المحتوى الرئيسي -->
+<div id="welcome-screen">
+    <div class="logo" id="logoBtn">
+        <img src="1000033460.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/200/ffcc00/000000?text=INFSPM'">
+    </div>
+    <h1>WELCOME</h1>
+    <p style="color:#666;margin-top:15px;">Cliquez sur le logo pour commencer</p>
+</div>
+
 <div id="main-content">
     <div class="header">
-        <span style="font-weight:bold;">INFSPM</span>
-        <span class="progress" id="progress">0 / 25</span>
+        <span style="font-weight:bold; color:#ffcc00;">INFSPM</span>
+        <span class="progress" id="progressText">0 / 25</span>
     </div>
 
     <div id="questions-container"></div>
+    
     <button class="btn-submit" id="submitBtn" disabled>FINALISER & ENVOYER</button>
-    <div class="admin-link" id="adminButton">⚙️ Admin Console</div>
+    
+    <div class="admin-link" id="adminLink">⚙️ Admin Console</div>
 
     <div id="admin-panel">
         <div class="admin-header">
             <h2>CONSOLE ADMIN</h2>
-            <button class="exit-btn" onclick="location.reload()">SORTIR</button>
+            <button class="exit-btn" onclick="location.reload()">FERMER</button>
         </div>
-        <div id="admin-content"></div>
+        
+        <div id="login-area" class="login-area">
+            <h3 style="color:#ffcc00; margin-bottom:15px;">Accès Protégé</h3>
+            <input type="password" id="admin-password" placeholder="Code d'accès">
+            <button id="loginBtn">SE CONNECTER</button>
+        </div>
+        
+        <div id="data-area" class="data-area">
+            <div class="tabs">
+                <button class="tab active" id="tabStats">STATISTIQUES</button>
+                <button class="tab" id="tabResponses">INDIVIDUEL</button>
+            </div>
+            <div id="stats-content"></div>
+            <div id="responses-content" style="display:none;"></div>
+        </div>
     </div>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-    // 🔴🔴🔴 أسطر Firebase - غير القيم فقط بين علامتي التنصيص 🔴🔴🔴
+    // Configuration Firebase
     const firebaseConfig = {
-        apiKey: "AIzaSyDkKEdm85pDRJ5PgaSdn-lxBRyu0uZPF4Y",          // غيّر هذا
-        authDomain: "angioscanner-survey.firebaseapp.com", // غيّر هذا
-        projectId: "angioscanner-survey",                // غيّر هذا
-        storageBucket: "angioscanner-survey.firebasestorage.app", // غيّر هذا
-        messagingSenderId: "768907518533",                   // غيّر هذا
-        appId: "1:768907518533:web:21a3de5ca64416a1b2792c"                   // غيّر هذا
+        apiKey: "AIzaSyDkKEdm85pDRJ5PgaSdn-lxBRyu0uZPF4Y", // تأكد من صحة هذه المفاتيح
+        authDomain: "angioscanner-survey.firebaseapp.com",
+        projectId: "angioscanner-survey",
+        storageBucket: "angioscanner-survey.firebasestorage.app",
+        messagingSenderId: "768907518533",
+        appId: "1:768907518533:web:21a3de5ca64416a1b2792c"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const COLLECTION_NAME = "reponses_angioscanner";
+    const COLLECTION = "responses_v1";
 
-    // ========== الأسئلة - نسخة طبق الأصل من الملف Word ==========
+    // الأسئلة كما هي في طلبك
     const questions = [
-        // I. Informations professionnelles
-        { id: 1, section: "I. Informations professionnelles", 
-          text: "Sexe :", 
-          options: ["Masculin", "Féminin"] },
-          
-        { id: 2, 
-          text: "Tranche d'âge :", 
-          options: ["20-30", "31-40", "41-50", ">50"] },
-          
-        { id: 3, 
-          text: "Années d'expérience :", 
-          options: ["<5 ans", "5-10 ans", "11-20 ans", ">20 ans"] },
-          
-        { id: 4, 
-          text: "Grade :", 
-          options: ["MIMSP", "MIM spécialiste", "Autre :"] },
-          
-        { id: 5, 
-          text: "Type d'établissement :", 
-          options: ["Hôpital public", "Clinique privée"] },
-        
-        // II. Expérience en angioscanner thoracique
-        { id: 6, section: "II. Expérience en angioscanner thoracique", 
-          text: "Réalisez-vous régulièrement des angioscanners thoraciques ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 7, 
-          text: "Nombre d'examens par mois :", 
-          options: ["0-5", "6-10", "11-20", ">20"] },
-          
-        { id: 8, 
-          text: "L'angioscanner est-il l'examen de première intention pour la suspicion d'embolie pulmonaire ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 9, 
-          text: "Maîtrisez-vous le protocole technique ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 10, 
-          text: "Injecteur automatique disponible ?", 
-          options: ["Oui", "Non"] },
-        
-        // III. Prise en charge des patients âgés
-        { id: 11, section: "III. Prise en charge des patients âgés", 
-          text: "Recevez-vous fréquemment des patients âgés (>65 ans) ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 12, 
-          text: "Les patients âgés présentent-ils plus de difficultés lors de l'examen ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 13, 
-          text: "Principales difficultés :", 
-          options: [
-            "Difficulté de communication",
-            "Difficulté de compréhension",
-            "Agitation ou anxiété",
-            "Difficulté de positionnement",
-            "Pathologies associées",
-            "Autres :"
-          ]},
-          
-        { id: 14, 
-          text: "Adaptez-vous votre explication de l'examen ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 15, 
-          text: "Techniques utilisées pour faciliter la communication :", 
-          options: [
-            "Parler lentement",
-            "Utiliser des gestes",
-            "Répéter les consignes",
-            "Impliquer un accompagnant"
-          ]},
-        
-        // IV. Communication gériatrique
-        { id: 16, section: "IV. Communication gériatrique", 
-          text: "La communication influence-t-elle la qualité de l'examen ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 17, 
-          text: "Les difficultés de communication peuvent-elles provoquer des artéfacts ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 18, 
-          text: "Prenez-vous plus de temps avec les patients âgés ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 19, 
-          text: "La présence d'un accompagnant améliore-t-elle la coopération ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 20, 
-          text: "Avez-vous reçu une formation en communication gériatrique ?", 
-          options: ["Oui", "Non"] },
-        
-        // V. Qualité de l'examen et rôle du manipulateur
-        { id: 21, section: "V. Qualité de l'examen et rôle du manipulateur", 
-          text: "Le manipulateur joue-t-il un rôle essentiel dans la réussite de l'examen ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 22, 
-          text: "Facteurs influençant la qualité de l'examen :", 
-          options: [
-            "Préparation du patient",
-            "Choix du protocole",
-            "Communication",
-            "Expérience du manipulateur",
-            "Qualité de l'équipement"
-          ]},
-          
-        { id: 23, 
-          text: "Trouvez-vous des solutions face aux difficultés avec les patients âgés ?", 
-          options: ["Oui", "Non"] },
-          
-        { id: 24, 
-          text: "Si oui, quelles stratégies utilisez-vous ?", 
-          type: "text" },
-          
-        { id: 25, 
-          text: "Quelles améliorations proposez-vous pour la prise en charge des patients âgés ?", 
-          type: "text" }
+        { id: 1, section: "I. Informations professionnelles", text: "Sexe :", options: ["Masculin", "Féminin"] },
+        { id: 2, text: "Tranche d'âge :", options: ["20-30", "31-40", "41-50", ">50"] },
+        { id: 3, text: "Années d'expérience :", options: ["<5 ans", "5-10 ans", "11-20 ans", ">20 ans"] },
+        { id: 4, text: "Grade :", options: ["MIMSP", "MIM spécialiste", "Autre :"] },
+        { id: 5, text: "Type d'établissement :", options: ["Hôpital public", "Clinique privée"] },
+        { id: 6, section: "II. Expérience en angioscanner thoracique", text: "Réalisez-vous régulièrement des angioscanners thoraciques ?", options: ["Oui", "Non"] },
+        { id: 7, text: "Nombre d'examens par mois :", options: ["0-5", "6-10", "11-20", ">20"] },
+        { id: 8, text: "L'angioscanner est-il l'examen de première intention pour la suspicion d'embolie pulmonaire ?", options: ["Oui", "Non"] },
+        { id: 9, text: "Maîtrisez-vous le protocole technique ?", options: ["Oui", "Non"] },
+        { id: 10, text: "Injecteur automatique disponible ?", options: ["Oui", "Non"] },
+        { id: 11, section: "III. Prise en charge des patients âgés", text: "Recevez-vous fréquemment des patients âgés (>65 ans) ?", options: ["Oui", "Non"] },
+        { id: 12, text: "Les patients âgés présentent-ils plus de difficultés lors de l'examen ?", options: ["Oui", "Non"] },
+        { id: 13, text: "Principales difficultés :", options: ["Difficulté de communication", "Difficulté de compréhension", "Agitation ou anxiété", "Difficulté de positionnement", "Pathologies associées", "Autres :"] },
+        { id: 14, text: "Adaptez-vous votre explication de l'examen ?", options: ["Oui", "Non"] },
+        { id: 15, text: "Techniques utilisées pour faciliter la communication :", options: ["Parler lentement", "Utiliser des gestes", "Répéter les consignes", "Impliquer un accompagnant"] },
+        { id: 16, section: "IV. Communication gériatrique", text: "La communication influence-t-elle la qualité de l'examen ?", options: ["Oui", "Non"] },
+        { id: 17, text: "Les difficulties de communication peuvent-elles provoquer des artéfacts ?", options: ["Oui", "Non"] },
+        { id: 18, text: "Prenez-vous plus de temps avec les patients âgés ?", options: ["Oui", "Non"] },
+        { id: 19, text: "La présence d'un accompagnant améliore-t-elle la coopération ?", options: ["Oui", "Non"] },
+        { id: 20, text: "Avez-vous reçu une formation en communication gériatrique ?", options: ["Oui", "Non"] },
+        { id: 21, section: "V. Qualité de l'examen et rôle du manipulateur", text: "Le manipulateur joue-t-il un rôle essentiel dans la réussite de l'examen ?", options: ["Oui", "Non"] },
+        { id: 22, text: "Facteurs influençant la qualité de l'examen :", options: ["Préparation du patient", "Choix du protocole", "Communication", "Expérience du manipulateur", "Qualité de l'équipement"] },
+        { id: 23, text: "Trouvez-vous des solutions face aux difficultés avec les patients âgés ?", options: ["Oui", "Non"] },
+        { id: 24, text: "Si oui, quelles stratégies utilisez-vous ?", type: "text" },
+        { id: 25, text: "Quelles améliorations proposez-vous pour la prise en charge des patients âgés ?", type: "text" }
     ];
 
-    // ========== المتغيرات ==========
-    let answers = {};
-    let allResponses = [];
+    let userAnswers = {};
+    let cloudData = [];
 
-    // ========== عرض الأسئلة ==========
+    // وظائف الواجهة
+    const showLoader = (show) => document.getElementById('loader').style.display = show ? 'flex' : 'none';
+
+    // بدء التطبيق
+    document.getElementById('logoBtn').addEventListener('click', () => {
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        renderQuestions();
+    });
+
     function renderQuestions() {
         const container = document.getElementById('questions-container');
         container.innerHTML = '';
-
         questions.forEach(q => {
             if (q.section) {
-                const sectionDiv = document.createElement('div');
-                sectionDiv.className = 'section-title';
-                sectionDiv.textContent = q.section;
-                container.appendChild(sectionDiv);
+                const s = document.createElement('div');
+                s.className = 'section-title';
+                s.textContent = q.section;
+                container.appendChild(s);
             }
-
             const card = document.createElement('div');
             card.className = 'question-card';
+            card.innerHTML = `<div class="question-text"><span class="question-number">${q.id}.</span>${q.text}</div>`;
             
-            const qText = document.createElement('div');
-            qText.className = 'question-text';
-            qText.innerHTML = `<span class="question-number">${q.id}.</span> ${q.text}`;
-            card.appendChild(qText);
-
             if (q.options) {
                 q.options.forEach(opt => {
                     const btn = document.createElement('button');
                     btn.className = 'option';
                     btn.textContent = opt;
-                    btn.onclick = function() {
+                    btn.onclick = () => {
                         card.querySelectorAll('.option').forEach(b => b.classList.remove('selected'));
                         btn.classList.add('selected');
-                        answers[q.id] = opt;
-                        updateProgress();
+                        userAnswers[q.id] = opt;
+                        checkProgress();
                     };
                     card.appendChild(btn);
                 });
             } else {
-                const textarea = document.createElement('textarea');
-                textarea.className = 'text-input';
-                textarea.placeholder = 'Votre réponse...';
-                textarea.oninput = function(e) {
-                    answers[q.id] = e.target.value;
-                    updateProgress();
+                const txt = document.createElement('textarea');
+                txt.className = 'text-input';
+                txt.placeholder = 'Répondez ici...';
+                txt.oninput = (e) => {
+                    userAnswers[q.id] = e.target.value;
+                    checkProgress();
                 };
-                card.appendChild(textarea);
+                card.appendChild(txt);
             }
-
             container.appendChild(card);
         });
     }
 
-    // ========== تحديث التقدم ==========
-    function updateProgress() {
-        const count = Object.keys(answers).length;
-        document.getElementById('progress').textContent = `${count} / 25`;
+    function checkProgress() {
+        const count = Object.keys(userAnswers).length;
+        document.getElementById('progressText').textContent = `${count} / 25`;
         document.getElementById('submitBtn').disabled = count < 25;
     }
 
-    // ========== الإرسال إلى Firebase ==========
-    async function sendToFirebase() {
-        if (Object.keys(answers).length < 25) {
-            alert('Veuillez répondre à toutes les questions.');
-            return;
-        }
-
-        document.getElementById('loader').style.display = 'flex';
-
+    document.getElementById('submitBtn').onclick = async () => {
+        showLoader(true);
         try {
-            await addDoc(collection(db, COLLECTION_NAME), {
-                ...answers,
-                date: new Date().toISOString()
-            });
-            
-            document.getElementById('questions-container').innerHTML = `
+            await addDoc(collection(db, COLLECTION), { ...userAnswers, timestamp: new Date() });
+            document.getElementById('main-content').innerHTML = `
                 <div class="success-screen">
-                    <img src="1000037018.png" alt="Merci" onerror="this.style.backgroundColor='#ffcc00'">
-                    <h2>ENVOYÉ AVEC SUCCÈS</h2>
-                    <p>Merci pour votre participation.</p>
-                    <button onclick="location.reload()" class="btn-submit" style="width:auto;padding:12px 40px;">RETOUR</button>
-                </div>
-            `;
-            document.getElementById('submitBtn').style.display = 'none';
-            
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Erreur de connexion à Firebase. Vérifiez votre configuration.');
+                    <img src="1000037018.png" alt="Done" onerror="this.style.display='none'">
+                    <h2>MERCI POUR VOTRE PARTICIPATION</h2>
+                    <p>Vos réponses ont été enregistrées avec succès.</p>
+                    <button class="btn-submit" onclick="location.reload()">NOUVELLE RÉPONSE</button>
+                </div>`;
+        } catch (e) {
+            alert("Erreur de sauvegarde. Vérifiez votre connexion.");
         }
+        showLoader(false);
+    };
+
+    // منطقة الإدارة
+    document.getElementById('adminLink').onclick = () => {
+        const panel = document.getElementById('admin-panel');
+        panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    };
+
+    document.getElementById('loginBtn').onclick = async () => {
+        const pass = document.getElementById('admin-password').value;
+        if (pass === 'anwar17blt') {
+            showLoader(true);
+            try {
+                const snap = await getDocs(collection(db, COLLECTION));
+                cloudData = snap.docs.map(doc => doc.data());
+                document.getElementById('login-area').style.display = 'none';
+                document.getElementById('data-area').style.display = 'block';
+                displayStats();
+            } catch (e) {
+                alert("Erreur de chargement des données.");
+            }
+            showLoader(false);
+        } else {
+            alert("Mot de passe incorrect.");
+        }
+    };
+
+    function displayStats() {
+        const container = document.getElementById('stats-content');
+        container.innerHTML = `<div style="margin-bottom:15px; color:#ffcc00; font-weight:bold;">TOTAL: ${cloudData.length} RÉPONSES</div>`;
         
-        document.getElementById('loader').style.display = 'none';
+        questions.forEach(q => {
+            if (!q.options) return;
+            const item = document.createElement('div');
+            item.className = 'stat-item';
+            item.innerHTML = `<div style="margin-bottom:10px; font-weight:bold;">${q.id}. ${q.text}</div>`;
+            
+            q.options.forEach(opt => {
+                const count = cloudData.filter(d => d[q.id] === opt).length;
+                const percent = cloudData.length > 0 ? (count / cloudData.length * 100).toFixed(1) : 0;
+                item.innerHTML += `
+                    <div class="stat-label"><span>${opt}</span><span>${count} (${percent}%)</span></div>
+                    <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${percent}%"></div></div>
+                `;
+            });
+            container.appendChild(item);
+        });
     }
 
-    // ========== الإدارة ==========
-    async function openAdmin() {
-        const code = prompt('Code admin:');
-        if (code !== 'anwar17blt') {
-            alert('Code incorrect');
+    function displayResponses() {
+        const container = document.getElementById('responses-content');
+        container.innerHTML = '';
+        if (cloudData.length === 0) {
+            container.innerHTML = '<p style="text-align:center; padding:20px;">Aucune donnée disponible.</p>';
             return;
         }
-
-        document.getElementById('loader').style.display = 'flex';
-
-        try {
-            const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
-            allResponses = [];
-            querySnapshot.forEach(doc => {
-                allResponses.push({ id: doc.id, ...doc.data() });
+        cloudData.forEach((resp, idx) => {
+            const card = document.createElement('div');
+            card.className = 'response-card';
+            const dateStr = resp.timestamp?.toDate ? resp.timestamp.toDate().toLocaleString() : 'Date inconnue';
+            card.innerHTML = `<div class="response-date">Réponse #${idx+1} - ${dateStr}</div>`;
+            
+            questions.forEach(q => {
+                card.innerHTML += `<div class="answer-row"><span class="ans-q">Q${q.id}:</span> ${resp[q.id] || '-'}</div>`;
             });
-
-            document.querySelector('.header').style.display = 'none';
-            document.getElementById('questions-container').style.display = 'none';
-            document.getElementById('submitBtn').style.display = 'none';
-            document.getElementById('adminButton').style.display = 'none';
-            
-            let html = '<div id="admin-panel" style="display:block;">';
-            html += '<div class="admin-header"><h2>CONSOLE ADMIN</h2><button class="exit-btn" onclick="location.reload()">SORTIR</button></div>';
-            
-            allResponses.forEach((resp, index) => {
-                const date = resp.date ? new Date(resp.date).toLocaleString() : 'Date inconnue';
-                html += `<div class="response-card"><strong>Participant #${index + 1}</strong><br><small>${date}</small><br>`;
-                for (let i = 1; i <= 25; i++) {
-                    if (resp[i]) {
-                        html += `<p><span style="color:#ffcc00;">Q${i}:</span> ${resp[i]}</p>`;
-                    }
-                }
-                html += '</div>';
-            });
-            
-            document.getElementById('admin-content').innerHTML = html;
-            
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Erreur de chargement des données');
-        }
-        
-        document.getElementById('loader').style.display = 'none';
+            container.appendChild(card);
+        });
     }
 
-    // ========== Event Listeners ==========
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('startButton').addEventListener('click', function() {
-            document.getElementById('welcome-screen').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-            renderQuestions();
-        });
+    document.getElementById('tabStats').onclick = () => {
+        document.getElementById('tabStats').classList.add('active');
+        document.getElementById('tabResponses').classList.remove('active');
+        document.getElementById('stats-content').style.display = 'block';
+        document.getElementById('responses-content').style.display = 'none';
+        displayStats();
+    };
 
-        document.getElementById('submitBtn').addEventListener('click', sendToFirebase);
-        document.getElementById('adminButton').addEventListener('click', openAdmin);
-    });
+    document.getElementById('tabResponses').onclick = () => {
+        document.getElementById('tabResponses').classList.add('active');
+        document.getElementById('tabStats').classList.remove('active');
+        document.getElementById('stats-content').style.display = 'none';
+        document.getElementById('responses-content').style.display = 'block';
+        displayResponses();
+    };
+
 </script>
+
 </body>
 </html>
+

@@ -247,6 +247,7 @@
             background: #1a1a1a;
             border-radius: 10px;
             padding: 20px;
+            min-height: 200px;
         }
         
         .stat-item {
@@ -291,7 +292,7 @@
         .no-data { text-align: center; padding: 40px; color: #888; }
         .total-badge { background: #ffcc00; color: black; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; }
         
-        /* تحسينات جديدة لعرض النتائج */
+        /* تحسينات عرض النتائج */
         .stats-summary {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -406,6 +407,25 @@
             font-style: italic;
             color: #aaa;
         }
+
+        .error-message {
+            background: #ff3333;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .config-help {
+            background: #222;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -413,7 +433,7 @@
 <!-- شاشة التحميل -->
 <div id="loader">
     <div class="spinner"></div>
-    <p style="margin-top:20px;color:#ffcc00;">Connexion au cloud Firebase...</p>
+    <p style="margin-top:20px;color:#ffcc00;">Connexion à Firebase...</p>
 </div>
 
 <!-- شاشة البداية -->
@@ -445,7 +465,7 @@
             <button class="exit-btn" onclick="location.reload()">SORTIR</button>
         </div>
         
-        <!-- منطقة تسجيل الدخول -->
+        <!-- منطقة تسجيل الدخول - بدون عرض كلمة السر -->
         <div id="login-area" class="login-area">
             <h3 style="color:#ffcc00; margin-bottom:20px;">Accès Administrateur</h3>
             <input type="password" id="admin-password" placeholder="Entrez le code secret">
@@ -465,46 +485,32 @@
     </div>
 </div>
 
-<script>
-    // ========== 1. تعريف المتغيرات العامة ==========
+<script type="module">
+    // ========== استيراد مكتبات Firebase ==========
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+    // ========== تهيئة Firebase ==========
+    const firebaseConfig = {
+        apiKey: "AIzaSyDkKEdm85pDRJ5PgaSdn-lxBRyu0uZPF4Y",
+        authDomain: "angioscanner-survey.firebaseapp.com",
+        projectId: "angioscanner-survey",
+        storageBucket: "angioscanner-survey.firebasestorage.app",
+        messagingSenderId: "768907518533",
+        appId: "1:768907518533:web:21a3de5ca64416a1b2792c",
+        measurementId: "G-4KDH6BS558"
+    };
+
+    // تهيئة Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const collectionRef = collection(db, "reponses_angioscanner");
+
+    // ========== المتغيرات العامة ==========
     let answers = {};
     let allResponses = [];
-    let db = null;
-    let collectionRef = null;
-    const COLLECTION_NAME = "reponses_angioscanner";
 
-    // ========== 2. تهيئة Firebase ==========
-    function initFirebase() {
-        // التحقق من وجود Firebase
-        if (typeof firebase === 'undefined') {
-            console.log('⏳ Chargement de Firebase...');
-            return false;
-        }
-        
-        try {
-            // 🔴🔴🔴 ضع بيانات Firebase الحقيقية هنا 🔴🔴🔴
-            const firebaseConfig = {
-                apiKey: "AIzaSyDkKEdm85pDRJ5PgaSdn-lxBRyu0uZPF4Y",
-                authDomain: "angioscanner-survey.firebaseapp.com",
-                projectId: "angioscanner-survey",
-                storageBucket: "angioscanner-survey.firebasestorage.app",
-                messagingSenderId: "768907518533",
-                appId: "1:768907518533:web:21a3de5ca64416a1b2792c"
-            };
-            
-            // تهيئة Firebase
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
-            collectionRef = db.collection(COLLECTION_NAME);
-            console.log('✅ Firebase connecté avec succès');
-            return true;
-        } catch (error) {
-            console.error('❌ Erreur Firebase:', error);
-            return false;
-        }
-    }
-
-    // ========== 3. الأسئلة - نسخة طبق الأصل من الملف ==========
+    // ========== الأسئلة ==========
     const questions = [
         // I. Informations professionnelles
         { id: 1, section: "I. Informations professionnelles", text: "Sexe :", options: ["Masculin", "Féminin"] },
@@ -542,8 +548,8 @@
         { id: 25, text: "Quelles améliorations proposez-vous pour la prise en charge des patients âgés ?", type: "text" }
     ];
 
-    // ========== 4. عرض الأسئلة ==========
-    function renderQuestions() {
+    // ========== عرض الأسئلة ==========
+    window.renderQuestions = function() {
         const container = document.getElementById('questions-container');
         container.innerHTML = '';
 
@@ -589,37 +595,26 @@
 
             container.appendChild(card);
         });
-    }
+    };
 
-    // ========== 5. تحديث التقدم ==========
+    // ========== تحديث التقدم ==========
     function updateProgress() {
         const count = Object.keys(answers).length;
         document.getElementById('progress').textContent = `${count} / 25`;
         document.getElementById('submitBtn').disabled = count < 25;
     }
 
-    // ========== 6. بدء التطبيق ==========
+    // ========== بدء التطبيق ==========
     window.startApp = function() {
         document.getElementById('welcome-screen').style.display = 'none';
         document.getElementById('main-content').style.display = 'block';
         renderQuestions();
-        
-        // تهيئة Firebase
-        if (!db) {
-            initFirebase();
-        }
     };
 
-    // ========== 7. إرسال الإجابات ==========
+    // ========== إرسال الإجابات ==========
     window.sendAnswers = async function() {
         if (Object.keys(answers).length < 25) {
             alert('Veuillez répondre à toutes les questions.');
-            return;
-        }
-
-        // التأكد من تهيئة Firebase
-        if (!db && !initFirebase()) {
-            alert('Impossible de se connecter à Firebase. Vérifiez votre configuration.');
             return;
         }
 
@@ -630,10 +625,10 @@
             const dataToSend = {
                 ...answers,
                 date: new Date().toISOString(),
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                timestamp: serverTimestamp()
             };
 
-            await collectionRef.add(dataToSend);
+            await addDoc(collectionRef, dataToSend);
             
             // عرض شاشة النجاح
             document.getElementById('questions-container').innerHTML = `
@@ -649,37 +644,43 @@
             
         } catch (error) {
             console.error('❌ Erreur:', error);
-            alert('Erreur lors de l\'envoi: ' + error.message);
+            alert('Erreur: ' + error.message);
         } finally {
             document.getElementById('loader').style.display = 'none';
-            document.getElementById('submitBtn').disabled = false;
         }
     };
 
-    // ========== 8. لوحة الإدارة ==========
+    // ========== لوحة الإدارة ==========
     window.showAdminPanel = function() {
         document.getElementById('admin-panel').style.display = 'block';
     };
 
     window.validateAdmin = async function() {
         const password = document.getElementById('admin-password').value;
+        // كلمة السر مخفية تماماً في الكود
         if (password !== 'anwar17blt') {
             alert('Code incorrect');
-            return;
-        }
-
-        if (!db && !initFirebase()) {
-            alert('Impossible de se connecter à Firebase');
             return;
         }
 
         document.getElementById('loader').style.display = 'flex';
 
         try {
-            const snapshot = await collectionRef.get();
+            // Charger les données depuis Firebase
+            const querySnapshot = await getDocs(collectionRef);
             allResponses = [];
-            snapshot.forEach(doc => {
-                allResponses.push({ id: doc.id, ...doc.data() });
+            
+            querySnapshot.forEach(doc => {
+                const data = doc.data();
+                allResponses.push({ 
+                    id: doc.id, 
+                    ...data
+                });
+            });
+
+            // Trier par date (plus récent d'abord)
+            allResponses.sort((a, b) => {
+                return new Date(b.date || 0) - new Date(a.date || 0);
             });
 
             document.getElementById('login-area').style.display = 'none';
@@ -689,7 +690,22 @@
             
         } catch (error) {
             console.error('❌ Erreur:', error);
-            alert('Erreur de chargement: ' + error.message);
+            
+            document.getElementById('login-area').innerHTML = `
+                <div class="error-message">
+                    <h3>Erreur de connexion à Firebase</h3>
+                    <p>${error.message}</p>
+                    <div class="config-help">
+                        <p><strong>Vérifiez que :</strong></p>
+                        <ul style="margin-left:20px;">
+                            <li>La collection "reponses_angioscanner" existe dans Firebase</li>
+                            <li>Les règles Firebase permettent la lecture</li>
+                            <li>Vous êtes connecté à Internet</li>
+                        </ul>
+                        <button onclick="location.reload()" style="margin-top:10px; padding:10px; background:#ffcc00; border:none; border-radius:5px; cursor:pointer;">Réessayer</button>
+                    </div>
+                </div>
+            `;
         } finally {
             document.getElementById('loader').style.display = 'none';
         }
@@ -700,21 +716,23 @@
         if (tab === 'stats') {
             tabs[0].classList.add('active');
             tabs[1].classList.remove('active');
+            document.getElementById('stats-container').style.display = 'block';
+            document.getElementById('responses-container').style.display = 'none';
             displayStats();
         } else {
             tabs[1].classList.add('active');
             tabs[0].classList.remove('active');
+            document.getElementById('stats-container').style.display = 'none';
+            document.getElementById('responses-container').style.display = 'block';
             displayResponses();
         }
     };
 
     function displayStats() {
         const container = document.getElementById('stats-container');
-        container.style.display = 'block';
-        document.getElementById('responses-container').style.display = 'none';
         
         if (allResponses.length === 0) {
-            container.innerHTML = '<div class="no-data">Aucune donnée disponible</div>';
+            container.innerHTML = '<div class="no-data">Aucune donnée disponible dans Firebase</div>';
             return;
         }
 
@@ -730,71 +748,43 @@
                     <div class="summary-label">Dernière mise à jour</div>
                 </div>
                 <div class="summary-card">
-                    <div class="summary-number">${Object.keys(questions).length}</div>
+                    <div class="summary-number">${questions.length}</div>
                     <div class="summary-label">Questions</div>
                 </div>
             </div>
         `;
 
-        // Statistiques par section
-        const sections = {};
+        // Statistiques par question
         questions.forEach(q => {
-            if (q.section) {
-                sections[q.section] = [];
-            }
-        });
+            if (!q.options) return;
+            
+            html += '<div class="stat-question">';
+            html += `<h4>Q${q.id}. ${q.text}</h4>`;
 
-        // Grouper les questions par section
-        let currentSection = '';
-        questions.forEach(q => {
-            if (q.section) {
-                currentSection = q.section;
-                sections[currentSection] = sections[currentSection] || [];
-            }
-            if (currentSection && q.options) {
-                sections[currentSection].push(q);
-            }
-        });
+            const counts = {};
+            q.options.forEach(opt => counts[opt] = 0);
 
-        // Afficher chaque section
-        Object.keys(sections).forEach(sectionName => {
-            const sectionQuestions = sections[sectionName];
-            if (sectionQuestions.length === 0) return;
+            allResponses.forEach(r => {
+                if (r[q.id] && counts.hasOwnProperty(r[q.id])) {
+                    counts[r[q.id]]++;
+                }
+            });
 
-            html += `<div class="stat-section">`;
-            html += `<h3>${sectionName}</h3>`;
-
-            sectionQuestions.forEach(q => {
-                html += '<div class="stat-question">';
-                html += `<h4>Q${q.id}. ${q.text}</h4>`;
-
-                const counts = {};
-                q.options.forEach(opt => counts[opt] = 0);
-
-                allResponses.forEach(r => {
-                    if (r[q.id] && counts.hasOwnProperty(r[q.id])) {
-                        counts[r[q.id]]++;
-                    }
-                });
-
-                q.options.forEach(opt => {
-                    const count = counts[opt] || 0;
-                    const percent = ((count / allResponses.length) * 100).toFixed(1);
-                    
-                    html += `
-                        <div style="margin:10px 0;">
-                            <div class="stat-label">
-                                <span>${opt}</span>
-                                <span>${count} (${percent}%)</span>
-                            </div>
-                            <div class="stat-bar-bg">
-                                <div class="stat-bar-fill" style="width: ${percent}%"></div>
-                            </div>
+            q.options.forEach(opt => {
+                const count = counts[opt] || 0;
+                const percent = allResponses.length > 0 ? ((count / allResponses.length) * 100).toFixed(1) : 0;
+                
+                html += `
+                    <div style="margin:10px 0;">
+                        <div class="stat-label">
+                            <span>${opt}</span>
+                            <span>${count} (${percent}%)</span>
                         </div>
-                    `;
-                });
-
-                html += '</div>';
+                        <div class="stat-bar-bg">
+                            <div class="stat-bar-fill" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
+                `;
             });
 
             html += '</div>';
@@ -805,11 +795,9 @@
 
     function displayResponses() {
         const container = document.getElementById('responses-container');
-        container.style.display = 'block';
-        document.getElementById('stats-container').style.display = 'none';
         
         if (allResponses.length === 0) {
-            container.innerHTML = '<div class="no-data">Aucune réponse disponible</div>';
+            container.innerHTML = '<div class="no-data">Aucune réponse disponible dans Firebase</div>';
             return;
         }
 
@@ -836,14 +824,13 @@
                 <div class="response-grid">
             `;
 
-            // Afficher toutes les réponses dans une grille
+            // Afficher toutes les réponses
             questions.forEach(q => {
                 if (resp[q.id]) {
-                    const isTextResponse = !q.options;
                     html += `
                         <div class="response-item">
                             <div class="response-q">Q${q.id}</div>
-                            <div class="response-a ${isTextResponse ? 'text-response' : ''}">
+                            <div class="response-a ${!q.options ? 'text-response' : ''}">
                                 ${resp[q.id]}
                             </div>
                         </div>
@@ -869,10 +856,6 @@
         });
     };
 </script>
-
-<!-- تحميل Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
 
 </body>
 </html>

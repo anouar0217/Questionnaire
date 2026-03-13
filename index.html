@@ -6,12 +6,15 @@
     <title>ANGIO-SCANNER - Étude Gériatrie</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background: #0a0a0a; color: white; overflow-x: hidden; }
+        body { background: #0a0a0a; color: white; }
 
         /* شاشة البداية */
         #welcome-screen {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: black;
             display: flex;
             flex-direction: column;
@@ -21,7 +24,8 @@
         }
 
         .logo {
-            width: 200px; height: 200px;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
             border: 4px solid #ffcc00;
             overflow: hidden;
@@ -29,7 +33,9 @@
             box-shadow: 0 0 30px #ffcc00;
             animation: pulse 2s infinite;
         }
-        .logo img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+        .logo img { width: 100%; height: 100%; object-fit: cover; }
+
         @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
 
         h1 { color: #ffcc00; margin-top: 30px; letter-spacing: 5px; }
@@ -85,8 +91,9 @@
             cursor: pointer;
             transition: 0.2s;
         }
+
         .option:hover { border-color: #ffcc00; }
-        .option.selected { background: #ffcc00; color: black; font-weight: bold; border-color: #ffcc00; }
+        .option.selected { background: #ffcc00; color: black; font-weight: bold; }
 
         .text-input {
             width: 100%;
@@ -97,7 +104,6 @@
             border-radius: 8px;
             min-height: 120px;
             font-size: 1rem;
-            resize: vertical;
         }
 
         .btn-submit {
@@ -113,146 +119,306 @@
             margin: 30px 0;
             transition: 0.2s;
         }
-        .btn-submit:hover:not(:disabled) { background: #e6b800; transform: scale(1.01); }
+
+        .btn-submit:hover:not(:disabled) { background: #e6b800; transform: scale(1.02); }
         .btn-submit:disabled { background: #333; color: #666; cursor: not-allowed; }
 
-        .success-screen { text-align: center; padding: 50px 20px; background: #111; border-radius: 20px; }
-        .success-screen img { width: 120px; border-radius: 15px; margin-bottom: 20px; }
+        .success-screen {
+            text-align: center;
+            padding: 50px 20px;
+            background: #111;
+            border-radius: 20px;
+        }
+
+        .success-screen img {
+            width: 150px;
+            border-radius: 20px;
+            border: 3px solid #ffcc00;
+            margin-bottom: 30px;
+        }
+
         .success-screen h2 { color: #ffcc00; margin: 20px 0; }
 
         #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none; align-items: center; justify-content: center;
-            flex-direction: column; z-index: 2000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 2000;
         }
+
         .spinner {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             border: 4px solid #333;
             border-top-color: #ffcc00;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .admin-link { text-align: center; color: #444; cursor: pointer; margin: 40px 0; font-size: 0.9rem; }
+        .admin-link { text-align: center; color: #333; cursor: pointer; margin: 20px 0; }
         .admin-link:hover { color: #ffcc00; }
 
-        #admin-panel { background: #111; border-radius: 10px; padding: 20px; margin-top: 30px; display: none; border: 1px solid #ffcc00; }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        #admin-panel {
+            background: #111;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
         .admin-header h2 { color: #ffcc00; }
-        .exit-btn { background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
-
-        .login-area { background: #1a1a1a; padding: 30px; border-radius: 10px; text-align: center; }
-        .login-area input { width: 100%; padding: 15px; margin: 15px 0; background: #111; border: 1px solid #333; color: white; border-radius: 8px; text-align: center; }
-        .login-area button { background: #ffcc00; color: black; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
-
+        
+        .exit-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .login-area {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .login-area input {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .login-area button {
+            background: #ffcc00;
+            color: black;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        
         .data-area { display: none; }
-        .tabs { display: flex; gap: 5px; margin-bottom: 20px; }
-        .tab { flex: 1; padding: 12px; background: #222; border: none; color: white; cursor: pointer; border-radius: 5px; }
-        .tab.active { background: #ffcc00; color: black; font-weight: bold; }
-
-        .stat-item { background: #1a1a1a; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
-        .stat-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
-        .stat-bar-bg { height: 10px; background: #333; border-radius: 5px; overflow: hidden; }
-        .stat-bar-fill { height: 100%; background: #ffcc00; transition: width 0.5s ease-out; }
-
-        .response-card { background: #1a1a1a; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 3px solid #ffcc00; }
-        .response-date { font-size: 0.8rem; color: #666; margin-bottom: 10px; }
-        .answer-row { font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid #222; }
-        .ans-q { color: #ffcc00; font-weight: bold; margin-right: 5px; }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            background: #222;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .tab.active { background: #ffcc00; color: black; }
+        
+        .stats-container, .responses-container {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .stat-item {
+            margin: 15px 0;
+            padding: 10px;
+            background: #111;
+            border-radius: 8px;
+        }
+        
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: #ffcc00;
+        }
+        
+        .stat-bar-bg {
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .stat-bar-fill {
+            height: 100%;
+            background: #ffcc00;
+            border-radius: 4px;
+        }
+        
+        .response-card {
+            background: #111;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ffcc00;
+            border-radius: 8px;
+        }
+        
+        .response-date { color: #888; font-size: 0.9rem; margin: 5px 0 10px; }
+        .response-answer { margin: 8px 0; padding: 5px 0; border-bottom: 1px solid #333; }
+        .response-answer:last-child { border-bottom: none; }
+        .q-number { color: #ffcc00; font-weight: bold; margin-right: 8px; }
+        .no-data { text-align: center; padding: 40px; color: #888; }
+        .total-badge { background: #ffcc00; color: black; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+<!-- شاشة التحميل -->
 <div id="loader">
     <div class="spinner"></div>
-    <p style="margin-top:20px;color:#ffcc00;">Traitement en cours...</p>
+    <p style="margin-top:20px;color:#ffcc00;">Connexion au cloud Firebase...</p>
 </div>
 
+<!-- شاشة البداية -->
 <div id="welcome-screen">
-    <div class="logo" id="logoBtn">
-        <img src="1000033460.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/200/ffcc00/000000?text=INFSPM'">
+    <div class="logo" onclick="startApp()">
+        <img src="1000033460.jpg" alt="Logo INFSPM" onerror="this.style.backgroundColor='#ffcc00'">
     </div>
     <h1>WELCOME</h1>
-    <p style="color:#666;margin-top:15px;">Cliquez sur le logo pour commencer</p>
+    <p style="color:#666;margin-top:10px;">Cliquez sur le logo pour commencer</p>
 </div>
 
+<!-- المحتوى الرئيسي -->
 <div id="main-content">
     <div class="header">
-        <span style="font-weight:bold; color:#ffcc00;">INFSPM</span>
-        <span class="progress" id="progressText">0 / 25</span>
+        <span style="font-weight:bold;">INFSPM</span>
+        <span class="progress" id="progress">0 / 25</span>
     </div>
 
     <div id="questions-container"></div>
     
-    <button class="btn-submit" id="submitBtn" disabled>FINALISER & ENVOYER</button>
+    <button class="btn-submit" id="submitBtn" onclick="sendAnswers()" disabled>FINALISER & ENVOYER</button>
     
-    <div class="admin-link" id="adminLink">⚙️ Admin Console</div>
+    <div class="admin-link" onclick="showAdminPanel()">⚙️ Admin Console</div>
 
+    <!-- لوحة الإدارة -->
     <div id="admin-panel">
         <div class="admin-header">
             <h2>CONSOLE ADMIN</h2>
-            <button class="exit-btn" onclick="location.reload()">FERMER</button>
+            <button class="exit-btn" onclick="location.reload()">SORTIR</button>
         </div>
         
+        <!-- منطقة تسجيل الدخول -->
         <div id="login-area" class="login-area">
-            <h3 style="color:#ffcc00; margin-bottom:15px;">Accès Protégé</h3>
-            <input type="password" id="admin-password" placeholder="Code d'accès">
-            <button id="loginBtn">SE CONNECTER</button>
+            <h3 style="color:#ffcc00; margin-bottom:20px;">Accès Administrateur</h3>
+            <input type="password" id="admin-password" placeholder="Entrez le code secret">
+            <button onclick="validateAdmin()">VALIDER</button>
         </div>
         
+        <!-- منطقة البيانات -->
         <div id="data-area" class="data-area">
             <div class="tabs">
-                <button class="tab active" id="tabStats">STATISTIQUES</button>
-                <button class="tab" id="tabResponses">INDIVIDUEL</button>
+                <button class="tab active" onclick="switchTab('stats')">STATISTIQUES</button>
+                <button class="tab" onclick="switchTab('responses')">RÉPONSES INDIVIDUELLES</button>
             </div>
-            <div id="stats-content"></div>
-            <div id="responses-content" style="display:none;"></div>
+            
+            <div id="stats-container" class="stats-container"></div>
+            <div id="responses-container" class="responses-container" style="display: none;"></div>
         </div>
     </div>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+<script>
+    // ========== 1. تعريف المتغيرات العامة ==========
+    let answers = {};
+    let allResponses = [];
+    let db = null;
+    let collectionRef = null;
+    const COLLECTION_NAME = "reponses_angioscanner";
 
-    // Configuration Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyDkKEdm85pDRJ5PgaSdn-lxBRyu0uZPF4Y", // تأكد من صحة هذه المفاتيح
-        authDomain: "angioscanner-survey.firebaseapp.com",
-        projectId: "angioscanner-survey",
-        storageBucket: "angioscanner-survey.firebasestorage.app",
-        messagingSenderId: "768907518533",
-        appId: "1:768907518533:web:21a3de5ca64416a1b2792c"
-    };
+    // ========== 2. تهيئة Firebase ==========
+    function initFirebase() {
+        // التحقق من وجود Firebase
+        if (typeof firebase === 'undefined') {
+            console.log('⏳ Chargement de Firebase...');
+            return false;
+        }
+        
+        try {
+            // 🔴🔴🔴 ضع بيانات Firebase الحقيقية هنا 🔴🔴🔴
+            const firebaseConfig = {
+                apiKey: "AIzaSyDkKEdm85pDRJ5PgaSdn-lxBRyu0uZPF4Y",
+                authDomain: "angioscanner-survey.firebaseapp.com",
+                projectId: "angioscanner-survey",
+                storageBucket: "angioscanner-survey.firebasestorage.app",
+                messagingSenderId: "768907518533",
+                appId: "1:768907518533:web:21a3de5ca64416a1b2792c"
+            };
+            
+            // تهيئة Firebase
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            collectionRef = db.collection(COLLECTION_NAME);
+            console.log('✅ Firebase connecté avec succès');
+            return true;
+        } catch (error) {
+            console.error('❌ Erreur Firebase:', error);
+            return false;
+        }
+    }
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const COLLECTION = "responses_v1";
-
-    // الأسئلة كما هي في طلبك
+    // ========== 3. الأسئلة - نسخة طبق الأصل من الملف ==========
     const questions = [
+        // I. Informations professionnelles
         { id: 1, section: "I. Informations professionnelles", text: "Sexe :", options: ["Masculin", "Féminin"] },
         { id: 2, text: "Tranche d'âge :", options: ["20-30", "31-40", "41-50", ">50"] },
         { id: 3, text: "Années d'expérience :", options: ["<5 ans", "5-10 ans", "11-20 ans", ">20 ans"] },
         { id: 4, text: "Grade :", options: ["MIMSP", "MIM spécialiste", "Autre :"] },
         { id: 5, text: "Type d'établissement :", options: ["Hôpital public", "Clinique privée"] },
+        
+        // II. Expérience en angioscanner thoracique
         { id: 6, section: "II. Expérience en angioscanner thoracique", text: "Réalisez-vous régulièrement des angioscanners thoraciques ?", options: ["Oui", "Non"] },
         { id: 7, text: "Nombre d'examens par mois :", options: ["0-5", "6-10", "11-20", ">20"] },
         { id: 8, text: "L'angioscanner est-il l'examen de première intention pour la suspicion d'embolie pulmonaire ?", options: ["Oui", "Non"] },
         { id: 9, text: "Maîtrisez-vous le protocole technique ?", options: ["Oui", "Non"] },
         { id: 10, text: "Injecteur automatique disponible ?", options: ["Oui", "Non"] },
+        
+        // III. Prise en charge des patients âgés
         { id: 11, section: "III. Prise en charge des patients âgés", text: "Recevez-vous fréquemment des patients âgés (>65 ans) ?", options: ["Oui", "Non"] },
         { id: 12, text: "Les patients âgés présentent-ils plus de difficultés lors de l'examen ?", options: ["Oui", "Non"] },
         { id: 13, text: "Principales difficultés :", options: ["Difficulté de communication", "Difficulté de compréhension", "Agitation ou anxiété", "Difficulté de positionnement", "Pathologies associées", "Autres :"] },
         { id: 14, text: "Adaptez-vous votre explication de l'examen ?", options: ["Oui", "Non"] },
         { id: 15, text: "Techniques utilisées pour faciliter la communication :", options: ["Parler lentement", "Utiliser des gestes", "Répéter les consignes", "Impliquer un accompagnant"] },
+        
+        // IV. Communication gériatrique
         { id: 16, section: "IV. Communication gériatrique", text: "La communication influence-t-elle la qualité de l'examen ?", options: ["Oui", "Non"] },
-        { id: 17, text: "Les difficulties de communication peuvent-elles provoquer des artéfacts ?", options: ["Oui", "Non"] },
+        { id: 17, text: "Les difficultés de communication peuvent-elles provoquer des artéfacts ?", options: ["Oui", "Non"] },
         { id: 18, text: "Prenez-vous plus de temps avec les patients âgés ?", options: ["Oui", "Non"] },
         { id: 19, text: "La présence d'un accompagnant améliore-t-elle la coopération ?", options: ["Oui", "Non"] },
         { id: 20, text: "Avez-vous reçu une formation en communication gériatrique ?", options: ["Oui", "Non"] },
+        
+        // V. Qualité de l'examen et rôle du manipulateur
         { id: 21, section: "V. Qualité de l'examen et rôle du manipulateur", text: "Le manipulateur joue-t-il un rôle essentiel dans la réussite de l'examen ?", options: ["Oui", "Non"] },
         { id: 22, text: "Facteurs influençant la qualité de l'examen :", options: ["Préparation du patient", "Choix du protocole", "Communication", "Expérience du manipulateur", "Qualité de l'équipement"] },
         { id: 23, text: "Trouvez-vous des solutions face aux difficultés avec les patients âgés ?", options: ["Oui", "Non"] },
@@ -260,169 +426,284 @@
         { id: 25, text: "Quelles améliorations proposez-vous pour la prise en charge des patients âgés ?", type: "text" }
     ];
 
-    let userAnswers = {};
-    let cloudData = [];
-
-    // وظائف الواجهة
-    const showLoader = (show) => document.getElementById('loader').style.display = show ? 'flex' : 'none';
-
-    // بدء التطبيق
-    document.getElementById('logoBtn').addEventListener('click', () => {
-        document.getElementById('welcome-screen').style.display = 'none';
-        document.getElementById('main-content').style.display = 'block';
-        renderQuestions();
-    });
-
+    // ========== 4. عرض الأسئلة ==========
     function renderQuestions() {
         const container = document.getElementById('questions-container');
         container.innerHTML = '';
+
         questions.forEach(q => {
             if (q.section) {
-                const s = document.createElement('div');
-                s.className = 'section-title';
-                s.textContent = q.section;
-                container.appendChild(s);
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section-title';
+                sectionDiv.textContent = q.section;
+                container.appendChild(sectionDiv);
             }
+
             const card = document.createElement('div');
             card.className = 'question-card';
-            card.innerHTML = `<div class="question-text"><span class="question-number">${q.id}.</span>${q.text}</div>`;
             
+            const qText = document.createElement('div');
+            qText.className = 'question-text';
+            qText.innerHTML = `<span class="question-number">${q.id}.</span> ${q.text}`;
+            card.appendChild(qText);
+
             if (q.options) {
                 q.options.forEach(opt => {
                     const btn = document.createElement('button');
                     btn.className = 'option';
                     btn.textContent = opt;
-                    btn.onclick = () => {
+                    btn.onclick = function() {
                         card.querySelectorAll('.option').forEach(b => b.classList.remove('selected'));
                         btn.classList.add('selected');
-                        userAnswers[q.id] = opt;
-                        checkProgress();
+                        answers[q.id] = opt;
+                        updateProgress();
                     };
                     card.appendChild(btn);
                 });
             } else {
-                const txt = document.createElement('textarea');
-                txt.className = 'text-input';
-                txt.placeholder = 'Répondez ici...';
-                txt.oninput = (e) => {
-                    userAnswers[q.id] = e.target.value;
-                    checkProgress();
+                const textarea = document.createElement('textarea');
+                textarea.className = 'text-input';
+                textarea.placeholder = 'Votre réponse...';
+                textarea.oninput = function(e) {
+                    answers[q.id] = e.target.value;
+                    updateProgress();
                 };
-                card.appendChild(txt);
+                card.appendChild(textarea);
             }
+
             container.appendChild(card);
         });
     }
 
-    function checkProgress() {
-        const count = Object.keys(userAnswers).length;
-        document.getElementById('progressText').textContent = `${count} / 25`;
+    // ========== 5. تحديث التقدم ==========
+    function updateProgress() {
+        const count = Object.keys(answers).length;
+        document.getElementById('progress').textContent = `${count} / 25`;
         document.getElementById('submitBtn').disabled = count < 25;
     }
 
-    document.getElementById('submitBtn').onclick = async () => {
-        showLoader(true);
-        try {
-            await addDoc(collection(db, COLLECTION), { ...userAnswers, timestamp: new Date() });
-            document.getElementById('main-content').innerHTML = `
-                <div class="success-screen">
-                    <img src="1000037018.png" alt="Done" onerror="this.style.display='none'">
-                    <h2>MERCI POUR VOTRE PARTICIPATION</h2>
-                    <p>Vos réponses ont été enregistrées avec succès.</p>
-                    <button class="btn-submit" onclick="location.reload()">NOUVELLE RÉPONSE</button>
-                </div>`;
-        } catch (e) {
-            alert("Erreur de sauvegarde. Vérifiez votre connexion.");
+    // ========== 6. بدء التطبيق ==========
+    window.startApp = function() {
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        renderQuestions();
+        
+        // تهيئة Firebase
+        if (!db) {
+            initFirebase();
         }
-        showLoader(false);
     };
 
-    // منطقة الإدارة
-    document.getElementById('adminLink').onclick = () => {
-        const panel = document.getElementById('admin-panel');
-        panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    // ========== 7. إرسال الإجابات ==========
+    window.sendAnswers = async function() {
+        if (Object.keys(answers).length < 25) {
+            alert('Veuillez répondre à toutes les questions.');
+            return;
+        }
+
+        // التأكد من تهيئة Firebase
+        if (!db && !initFirebase()) {
+            alert('Impossible de se connecter à Firebase. Vérifiez votre configuration.');
+            return;
+        }
+
+        document.getElementById('loader').style.display = 'flex';
+        document.getElementById('submitBtn').disabled = true;
+
+        try {
+            const dataToSend = {
+                ...answers,
+                date: new Date().toISOString(),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            await collectionRef.add(dataToSend);
+            
+            // عرض شاشة النجاح
+            document.getElementById('questions-container').innerHTML = `
+                <div class="success-screen">
+                    <img src="1000037018.png" alt="Merci" onerror="this.style.backgroundColor='#ffcc00'">
+                    <h2>ENVOYÉ AVEC SUCCÈS</h2>
+                    <p>Merci pour votre participation.</p>
+                    <button onclick="location.reload()" class="btn-submit" style="width:auto;padding:12px 40px;">RETOUR</button>
+                </div>
+            `;
+            document.getElementById('submitBtn').style.display = 'none';
+            document.querySelector('.admin-link').style.display = 'none';
+            
+        } catch (error) {
+            console.error('❌ Erreur:', error);
+            alert('Erreur lors de l\'envoi: ' + error.message);
+        } finally {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
+        }
     };
 
-    document.getElementById('loginBtn').onclick = async () => {
-        const pass = document.getElementById('admin-password').value;
-        if (pass === 'anwar17blt') {
-            showLoader(true);
-            try {
-                const snap = await getDocs(collection(db, COLLECTION));
-                cloudData = snap.docs.map(doc => doc.data());
-                document.getElementById('login-area').style.display = 'none';
-                document.getElementById('data-area').style.display = 'block';
-                displayStats();
-            } catch (e) {
-                alert("Erreur de chargement des données.");
-            }
-            showLoader(false);
+    // ========== 8. لوحة الإدارة ==========
+    window.showAdminPanel = function() {
+        document.getElementById('admin-panel').style.display = 'block';
+    };
+
+    window.validateAdmin = async function() {
+        const password = document.getElementById('admin-password').value;
+        if (password !== 'anwar17blt') {
+            alert('Code incorrect');
+            return;
+        }
+
+        if (!db && !initFirebase()) {
+            alert('Impossible de se connecter à Firebase');
+            return;
+        }
+
+        document.getElementById('loader').style.display = 'flex';
+
+        try {
+            const snapshot = await collectionRef.get();
+            allResponses = [];
+            snapshot.forEach(doc => {
+                allResponses.push({ id: doc.id, ...doc.data() });
+            });
+
+            document.getElementById('login-area').style.display = 'none';
+            document.getElementById('data-area').style.display = 'block';
+            
+            displayStats();
+            
+        } catch (error) {
+            console.error('❌ Erreur:', error);
+            alert('Erreur de chargement: ' + error.message);
+        } finally {
+            document.getElementById('loader').style.display = 'none';
+        }
+    };
+
+    window.switchTab = function(tab) {
+        const tabs = document.querySelectorAll('.tab');
+        if (tab === 'stats') {
+            tabs[0].classList.add('active');
+            tabs[1].classList.remove('active');
+            displayStats();
         } else {
-            alert("Mot de passe incorrect.");
+            tabs[1].classList.add('active');
+            tabs[0].classList.remove('active');
+            displayResponses();
         }
     };
 
     function displayStats() {
-        const container = document.getElementById('stats-content');
-        container.innerHTML = `<div style="margin-bottom:15px; color:#ffcc00; font-weight:bold;">TOTAL: ${cloudData.length} RÉPONSES</div>`;
+        const container = document.getElementById('stats-container');
+        container.style.display = 'block';
+        document.getElementById('responses-container').style.display = 'none';
         
+        if (allResponses.length === 0) {
+            container.innerHTML = '<div class="no-data">Aucune donnée disponible</div>';
+            return;
+        }
+
+        let html = `<div class="total-badge">📊 Total des participants : ${allResponses.length}</div>`;
+
         questions.forEach(q => {
             if (!q.options) return;
-            const item = document.createElement('div');
-            item.className = 'stat-item';
-            item.innerHTML = `<div style="margin-bottom:10px; font-weight:bold;">${q.id}. ${q.text}</div>`;
             
+            html += '<div class="stat-item">';
+            html += `<h4 style="margin-bottom:15px;">Q${q.id}. ${q.text}</h4>`;
+
+            const counts = {};
+            q.options.forEach(opt => counts[opt] = 0);
+
+            allResponses.forEach(r => {
+                if (r[q.id] && counts.hasOwnProperty(r[q.id])) {
+                    counts[r[q.id]]++;
+                }
+            });
+
             q.options.forEach(opt => {
-                const count = cloudData.filter(d => d[q.id] === opt).length;
-                const percent = cloudData.length > 0 ? (count / cloudData.length * 100).toFixed(1) : 0;
-                item.innerHTML += `
-                    <div class="stat-label"><span>${opt}</span><span>${count} (${percent}%)</span></div>
-                    <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${percent}%"></div></div>
+                const count = counts[opt] || 0;
+                const percent = ((count / allResponses.length) * 100).toFixed(1);
+                
+                html += `
+                    <div style="margin:10px 0;">
+                        <div class="stat-label">
+                            <span>${opt}</span>
+                            <span>${count} (${percent}%)</span>
+                        </div>
+                        <div class="stat-bar-bg">
+                            <div class="stat-bar-fill" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
                 `;
             });
-            container.appendChild(item);
+
+            html += '</div>';
         });
+
+        container.innerHTML = html;
     }
 
     function displayResponses() {
-        const container = document.getElementById('responses-content');
-        container.innerHTML = '';
-        if (cloudData.length === 0) {
-            container.innerHTML = '<p style="text-align:center; padding:20px;">Aucune donnée disponible.</p>';
+        const container = document.getElementById('responses-container');
+        container.style.display = 'block';
+        document.getElementById('stats-container').style.display = 'none';
+        
+        if (allResponses.length === 0) {
+            container.innerHTML = '<div class="no-data">Aucune réponse disponible</div>';
             return;
         }
-        cloudData.forEach((resp, idx) => {
-            const card = document.createElement('div');
-            card.className = 'response-card';
-            const dateStr = resp.timestamp?.toDate ? resp.timestamp.toDate().toLocaleString() : 'Date inconnue';
-            card.innerHTML = `<div class="response-date">Réponse #${idx+1} - ${dateStr}</div>`;
+
+        let html = '';
+
+        allResponses.forEach((resp, index) => {
+            const date = resp.date ? new Date(resp.date).toLocaleString('fr-FR') : 'Date inconnue';
             
-            questions.forEach(q => {
-                card.innerHTML += `<div class="answer-row"><span class="ans-q">Q${q.id}:</span> ${resp[q.id] || '-'}</div>`;
-            });
-            container.appendChild(card);
+            html += '<div class="response-card">';
+            html += `<div style="margin-bottom:10px;"><strong>Participant #${index + 1}</strong></div>`;
+            html += `<div class="response-date">${date}</div>`;
+
+            for (let i = 1; i <= 25; i++) {
+                if (resp[i]) {
+                    html += `<div class="response-answer">
+                        <span class="q-number">Q${i}:</span> ${resp[i]}
+                    </div>`;
+                }
+            }
+
+            html += '</div>';
         });
+
+        container.innerHTML = html;
     }
-
-    document.getElementById('tabStats').onclick = () => {
-        document.getElementById('tabStats').classList.add('active');
-        document.getElementById('tabResponses').classList.remove('active');
-        document.getElementById('stats-content').style.display = 'block';
-        document.getElementById('responses-content').style.display = 'none';
-        displayStats();
-    };
-
-    document.getElementById('tabResponses').onclick = () => {
-        document.getElementById('tabResponses').classList.add('active');
-        document.getElementById('tabStats').classList.remove('active');
-        document.getElementById('stats-content').style.display = 'none';
-        document.getElementById('responses-content').style.display = 'block';
-        displayResponses();
-    };
-
 </script>
 
+<!-- تحميل Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Snake Game</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div id="game-container">
+		<canvas id="gc" class="game-canvas" width="400" height="400"></canvas>
+	</div>
+	<div class="keys">
+	  <a class="up arr" onclick="Snake.action('up')">
+	    <i class="chevron up"></i></a>
+	  <br />
+	  <a class="left arr" onclick="Snake.action('left')">
+	    <i class="chevron left"></i></a>
+	  <a class="down arr" onclick="Snake.action('down')">
+	    <i class="chevron down"></i></a>
+	  <a class="right arr" onclick="Snake.action('right')">
+	    <i class="chevron right"></i></a>
+	</div>
+	<script type="text/javascript" src="game.js"></script>
 </body>
 </html>
-
